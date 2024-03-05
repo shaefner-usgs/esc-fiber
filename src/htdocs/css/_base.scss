@@ -1,0 +1,123 @@
+@use 'sass:color';
+
+@use 'util/opt/variables' as *;
+
+@layer
+  leaflet,
+  default,
+  overrides;
+
+@layer default {
+  *,
+  *:before,
+  *:after {
+    box-sizing: inherit;
+  }
+
+  a {
+    color: var(--accent-color);
+    text-decoration: {
+      color: color.scale($accent-color, $lightness: 75%);
+      skip-ink: none;
+      thickness: 2px;
+    }
+    text-underline-offset: 2px;
+    transition: text-decoration-color $effect-duration ease-in-out;
+
+    &:active,
+    &:visited {
+      color: var(--accent-color);
+    }
+
+    &:hover {
+      text-decoration-color: color.scale($accent-color, $lightness: 25%);
+      transition-duration: $effect-on-duration;
+    }
+
+    &:active {
+      text-decoration-color: var(--accent-color);
+    }
+  }
+
+  body,
+  html,
+  main {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    background: var(--bg-color);
+    box-sizing: border-box;
+    color: var(--text-color);
+    font: 16px $font-family;
+    position: relative;
+  }
+
+  h1 {
+    font-size: 2rem;
+    font-weight: 500;
+    margin: 0;
+  }
+
+  h2,
+  h3,
+  h4,
+  h5 {
+    font-family: $font-family-headers;
+    font-weight: normal;
+    line-height: 1.25;
+  }
+
+  h2 {
+    font-size: 2rem;
+    margin: 2.25rem 0 .625rem;
+  }
+
+  h3 {
+    font-size: 1.625rem;
+    margin: 1.625rem 0 1.25rem;
+  }
+
+  h4 {
+    font-size: 1.4375rem;
+    margin: 0 0 .75rem;
+  }
+
+  h5 {
+    font-size: 1.125rem;
+    margin: 1rem 0 .5rem
+  }
+
+  header {
+    align-items: center;
+    background: rgba(0, 38, 76, 0.91);
+    border-bottom: 2px solid #00264c;
+    color: #fff;
+    display: flex;
+    gap: 0 1rem;
+    height: 4rem;
+    left: 0;
+    padding: 0 1rem;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 10;
+
+    img {
+      border: 0;
+      margin-top: .5rem;
+      width: 7.5rem;
+    }
+  }
+
+  p {
+    line-height: $line-height;
+    margin: 1.25rem 0;
+
+    > strong {
+      font-weight: 500;
+    }
+  }
+}

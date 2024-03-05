@@ -1,0 +1,57 @@
+{
+  "name": "esc-fiber-app",
+  "version": "0.1.0",
+  "description": "Web application for visualizing and interacting with distributed acoustic sensing data from fiber optic cables.",
+  "keywords": [
+    "usgs",
+    "earthquake"
+  ],
+  "author": "Scott Haefner",
+  "license": "CC0-1.0",
+  "main": "src/htdocs/js/index.js",
+  "scripts": {
+    "build": "grunt build",
+    "dist": "grunt dist",
+    "watch": "grunt",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "engines": {
+    "node": ">=10"
+  },
+  "dependencies": {
+    "leaflet": "^1.9",
+    "leaflet-geojson-dateline": "github:shaefner-usgs/Leaflet.geoJSON.dateLine",
+    "leaflet-mouse-position": "github:shaefner-usgs/Leaflet.MousePosition",
+    "leaflet-mouseover-layer": "github:shaefner-usgs/Leaflet.mouseOverLayer",
+    "leaflet.utfgrid": "github:danzel/Leaflet.utfgrid",
+    "luxon": "^3.4"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.17.5",
+    "@babel/plugin-transform-runtime": "^7.17.0",
+    "@babel/preset-env": "^7.16.11",
+    "@lodder/grunt-postcss": "^3.1.1",
+    "autoprefixer": "^10.4.2",
+    "babelify": "^10.0.0",
+    "cssnano": "^5.1.1",
+    "gateway": "^1.0.0",
+    "grunt": "^1.5.2",
+    "grunt-browserify": "^6.0.0",
+    "grunt-contrib-clean": "^2.0.0",
+    "grunt-contrib-connect": "^3.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^5.0.1",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-eslint": "^24.0.0",
+    "grunt-sass": "^3.1.0",
+    "http-rewrite-middleware": "^0.1.6",
+    "ini": "^2.0.0",
+    "load-grunt-tasks": "^5.1.0",
+    "postcss": "^8.4.8",
+    "sass": "^1.49.9"
+  }
+}

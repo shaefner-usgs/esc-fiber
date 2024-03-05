@@ -1,0 +1,37 @@
+@use 'opt/mixins' as *;
+@use 'opt/variables' as *;
+
+@layer default {
+  .props {
+    display: grid;
+    gap: .375rem .5rem;
+    grid-template-columns: max-content auto;
+    line-height: $line-height-alt;
+    margin: 1rem 0 0;
+
+    &.alt {
+      display: block;
+
+      dt {
+        color: var(--secondary-color);
+        margin: 1.25rem 0 .25rem;
+        text-align: left;
+        text-transform: none;
+
+        &:first-child {
+          padding-top: 0
+        }
+      }
+    }
+
+    dd {
+      margin: 0;
+    }
+
+    dt {
+      @include labels;
+
+      text-align: right;
+    }
+  }
+}

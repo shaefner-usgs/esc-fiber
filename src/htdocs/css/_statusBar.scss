@@ -1,0 +1,154 @@
+@use 'sass:color';
+
+@use 'util/opt/variables' as *;
+
+$bg-color: rgba(255, 255, 120, .95);
+$bg-color-error: rgba(223, 62, 62, .92);
+$height: 3rem;
+
+@layer default {
+  #status-bar {
+    bottom: 0;
+    box-shadow: 0 -2px 12px 0 rgba(0, 0, 0, .1);
+    height: $height;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    z-index: 10000;
+
+    &.hide {
+      height: 0;
+      transition: height $effect-duration ease-in .25s;
+    }
+
+    a {
+      color: #fff;
+      text-decoration-color: color.scale(#fff, $alpha: -40%);
+
+      &:hover {
+        text-decoration-color: color.scale(#fff, $alpha: -10%);
+      }
+
+      &:active {
+        text-decoration-color: #fff;
+      }
+    }
+
+    div {
+      align-items: center;
+      background: $bg-color;
+      border: solid rgb(255, 255, 0) {
+        width: 2px 0;
+      };
+      border-bottom-color: $bg-color;
+      display: none;
+      flex-direction: column;
+      justify-content: center;
+      min-height: $height;
+      text-shadow: 1px 1px 3px color.scale($bg-color, $lightness: 60%);
+
+      &:first-child {
+        display: flex; // only display first item
+      }
+
+      &.error {
+        background: $bg-color-error;
+        border-bottom-color: $bg-color-error;
+        border-top-color: rgb(195, 0, 0);
+        text-shadow: 1px 1px 3px color.scale($bg-color-error, $lightness: -40%);
+
+        h4 {
+          color: #fff;
+        }
+      }
+    }
+
+    h4 {
+      color: #333;
+      line-height: 1;
+      margin: 0;
+    }
+
+    p { // error details
+      color: #fff;
+      font-size: $font-size-smaller;
+      margin: 0;
+    }
+
+    .close,
+    .reload {
+      background: rgb(195, 0, 0);
+      border-radius: 50%;
+      height: 32px;
+      opacity: .75;
+      position: absolute;
+      transition: opacity $effect-duration ease-in-out;
+      width: 32px;
+
+      &:active {
+        box-shadow: inset 2px 4px 4px rgba(0, 0, 0, 0.15);
+        transition-duration: $effect-on-duration;
+      }
+
+      &:hover {
+        opacity: 1;
+        transition-duration: $effect-on-duration;
+      }
+    }
+
+    .close {
+      right: 6px;
+
+      &:after,
+      &:before { // 'x'
+        background: #fff;
+        content: '';
+        height: 20px;
+        left: 15px;
+        position: absolute;
+        top: 6px;
+        width: 2px;
+      }
+
+      &:after {
+        transform: rotate(-45deg);
+      }
+      &:before {
+        transform: rotate(45deg);
+      }
+    }
+
+    .reload {
+      padding: 7px;
+      right: 44px;
+
+      &:after,
+      &:before { // partial circle w/ arrow
+        content: '';
+        display: block;
+      }
+
+      &:after {
+        border: solid {
+          color: transparent transparent transparent #fff;
+          width: 4px 0 4px 6px;
+        }
+        height: 0;
+        position: absolute;
+        top: 4px;
+        left: 50%;
+        width: 0;
+      }
+
+      &:before {
+        border: 2px solid {
+          color: transparent #fff #fff #fff;
+        }
+        border-radius: 50%;
+        height: 18px;
+        width: 18px;
+        transform: rotate(45deg);
+      }
+    }
+  }
+}

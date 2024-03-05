@@ -1,0 +1,44 @@
+@use 'util/opt/variables' as *;
+
+@layer default {
+  #map,
+  #map-pane {
+    height: 100%;
+  }
+
+  #map {
+    z-index: 1;
+  }
+
+  #map-pane {
+    .count {
+      font-size: 0.8em;
+      margin-left: 0.3em;
+
+      &:after {
+        content: ')';
+      }
+      &:before {
+        content: '(';
+      }
+    }
+
+    // Rendering order of Features (map and layer controller)
+    .leaflet-cables-pane {
+      z-index: 425;
+    }
+    .leaflet-experiment-pane {
+      z-index: 424;
+    }
+    .leaflet-earthquakes-pane {
+      z-index: 423;
+    }
+
+    // Hide attribution text on (small screen) mobile devices
+    @media only screen and (max-width: $breakpoint-tablet-width) {
+      .leaflet-control-attribution {
+        display: none;
+      }
+    }
+  }
+}

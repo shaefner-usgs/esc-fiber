@@ -1,0 +1,18 @@
+# Compiled output
+.build
+dist
+
+# Configuration
+src/conf/config.ini*
+src/conf/httpd.conf
+
+# Dependencies
+node_modules
+
+# IDEs and editors
+*.sublime-workspace
+.nova
+
+# System files
+.DS_Store
+Thumbs.db

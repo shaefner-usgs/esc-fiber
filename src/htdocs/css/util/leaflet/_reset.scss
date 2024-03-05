@@ -1,0 +1,9 @@
+@layer overrides {
+  #map-pane .leaflet-control-reset {
+    margin-top: .375rem;
+
+    .icon-globe {
+      font-size: 1.25rem;
+    }
+  }
+}

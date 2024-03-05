@@ -1,0 +1,166 @@
+@use '../util/opt/mixins' as *;
+@use '../util/opt/variables' as *;
+
+@mixin hover {
+  background-image: linear-gradient(0deg, rgba(0, 0, 0, .1) 0, transparent);
+}
+
+@layer default {
+  .earthquake {
+    dd.status {
+      text-transform: capitalize;
+
+      i {
+        margin-left: .25rem;
+      }
+    }
+
+    h4 a {
+      color: var(--text-color);
+    }
+
+    .time {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .user {
+      padding-top: .25rem;
+    }
+  }
+
+  .impact-bubble {
+    align-items: center;
+    background: #fff;
+    border-radius: $button-border-radius;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    letter-spacing: .035rem;
+    max-width: 6rem;
+    min-width: 3.5rem;
+    overflow: hidden;
+    padding: .375rem 0;
+    text-decoration: none;
+    text-overflow: ellipsis;
+    text-shadow: 1px 1px 0 hsla(0, 0%, 100%, .2);
+
+    &:active,
+    &:visited {
+      color: #000;
+    }
+
+    &:hover {
+      @include hover;
+    }
+
+    &.mmiN\/A {
+      background: $mmi-NAcolor;
+    }
+    &.mmiI {
+      background: $mmiI-color;
+      border: 1px solid var(--border-color-lighter);  // add border so button shows up
+    }
+    &.mmiII {
+      background: $mmiII-color;
+    }
+    &.mmiIII  {
+      background: $mmiIII-color;
+    }
+    &.mmiIV {
+      background: $mmiIV-color;
+    }
+    &.mmiV {
+      background: $mmiV-color;
+    }
+    &.mmiVI {
+      background: $mmiVI-color;
+    }
+    &.mmiVII {
+      background: $mmiVII-color;
+    }
+    &.mmiVIII {
+      background: $mmiVIII-color;
+    }
+    &.mmiIX {
+      background: $mmiIX-color;
+    }
+    &.mmiX,
+    &.mmiX\+,
+    &.mmiXI,
+    &.mmiXII {
+      background: $mmiX-color;
+    }
+
+    &.pager-alertlevel-green {
+      background: $pager-green-color;
+    }
+    &.pager-alertlevel-orange {
+      background: $pager-orange-color;
+    }
+    &.pager-alertlevel-pending {
+      background: $pager-pending-color;
+    }
+    &.pager-alertlevel-red {
+      background: $pager-red-color;
+    }
+    &.pager-alertlevel-yellow {
+      background: $pager-yellow-color;
+    }
+
+    &.tsunami {
+      border: 1px solid #2e318c;
+      padding: 0;
+      position: relative;
+
+      > img,
+      > span {
+        height: 100%;
+        left: 0;
+        position: absolute;
+        top: 0;
+        width: 100%;
+      }
+
+      > img {
+        z-index: 1;
+      }
+
+      > span {
+        z-index: 10;
+
+        &:hover {
+          @include hover;
+        }
+      }
+    }
+
+    > abbr {
+      border-color: #666;
+      font-size: $font-size-smallest;
+    }
+
+    > strong {
+      font-size: .8125rem;
+      white-space: nowrap;
+    }
+
+    .roman {
+      font-family: $font-family-buttons;
+      text-transform: uppercase;
+    }
+  }
+
+  .impact-bubbles {
+    column-gap: 5px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    margin: 1rem 0;
+  }
+
+  .leaflet-tooltip-pane {
+    .user {
+      display: none;
+    }
+  }
+}

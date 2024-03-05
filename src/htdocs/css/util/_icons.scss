@@ -1,0 +1,64 @@
+/**
+ * Icon font, created at https://fontello.com on 2024-02-29
+ *
+ * Note: use font/config.json to import these icons at Fontello.com
+ */
+@layer default {
+  @font-face {
+    font-family: 'icons';
+    src: url('../font/icons.eot?90901608');
+    src: url('../font/icons.eot?90901608#iefix') format('embedded-opentype'),
+         url('../font/icons.woff2?90901608') format('woff2'),
+         url('../font/icons.woff?90901608') format('woff'),
+         url('../font/icons.ttf?90901608') format('truetype'),
+         url('../font/icons.svg?90901608#icons') format('svg');
+    font-weight: normal;
+    font-style: normal;
+  }
+
+  [class^="icon-"]:before,
+  [class*=" icon-"]:before {
+    font-family: "icons";
+    font-style: normal;
+    font-weight: normal;
+    speak: never;
+
+    display: inline-block;
+    text-decoration: inherit;
+    width: 1em;
+    // margin-right: .2em;
+    text-align: center;
+    // opacity: .8;
+
+    // For safety - reset parent styles that can break glyph codes
+    font-variant: normal;
+    text-transform: none;
+
+    // Fix buttons height, for twitter bootstrap
+    line-height: 1em;
+
+    // Font smoothing
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+
+    // 3D effect
+    // text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3);
+  }
+
+  .icon-check:before { content: '\e804'; }
+  .icon-globe:before { content: '\e800'; }
+  .icon-info:before { content: '\e801'; }
+  .icon-legend:before { content: '\e805'; }
+  .icon-link:before { content: '\f08e'; }
+  .icon-menu:before { content: '\f0c9'; }
+  .icon-next:before { content: '\e807'; }
+  .icon-prev:before { content: '\e806'; }
+  .icon-search:before { content: '\e803'; }
+  .icon-select:before { content: '\f25a'; }
+  .icon-settings:before { content: '\e802'; }
+  .icon-warning:before { content: '\e808'; }
+
+  .icon-check {
+    color: green;
+  }
+}

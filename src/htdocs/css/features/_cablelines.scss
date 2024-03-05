@@ -1,0 +1,31 @@
+@layer default {
+  .cablelines {
+    min-height: 4rem;
+
+    h4 {
+      text-transform: capitalize;
+    }
+
+    table {
+      border-collapse: separate;
+      border-spacing: 0 .375rem;
+    }
+
+    td,
+    th {
+      padding-right: .5rem;
+
+      &:last-child {
+        padding: 0;
+      }
+    }
+
+    th {
+      font-weight: 500;
+    }
+
+    .spinner {
+      margin-top: .625rem;
+    }
+  }
+}

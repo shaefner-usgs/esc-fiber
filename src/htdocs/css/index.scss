@@ -1,0 +1,20 @@
+@use 'sass:meta';
+
+@use 'base'; // must be first, to establish layer order
+
+@use 'features';
+@use 'util';
+
+@use 'mapPane';
+@use 'statusBar';
+
+/**
+ * External Sass lib, loaded into a layer (located in node_modules)
+ *
+ * see: https://github.com/sass/sass/issues/3240
+ */
+@layer leaflet {
+  @include meta.load-css('L.Control.MousePosition');
+}
+
+@import url('../lib/leaflet/leaflet.css') layer(leaflet);

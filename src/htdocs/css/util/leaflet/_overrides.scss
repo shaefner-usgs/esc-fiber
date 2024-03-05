@@ -1,0 +1,187 @@
+@use '../opt/mixins' as *;
+@use '../opt/variables' as *;
+
+@layer overrides {
+  .leaflet-container {
+    font: $font-size $font-family;
+    outline: none;
+  }
+
+  .leaflet-control-attribution,
+  .leaflet-control-mouseposition,
+  .leaflet-control-scale-line {
+    background: rgba(255, 255, 255, .8);
+    font-size: $font-size-smallest;
+  }
+
+  .leaflet-control-attribution {
+    color: var(--text-color-lighter);
+    max-width: 200px;
+    overflow: hidden; // quell long attributions
+    padding: 1px 4px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+
+    a {
+      color: var(--text-color-lighter);
+      transition: color $effect-duration ease-in-out;
+
+      &:hover,
+      &:active {
+        color: var(--text-color);
+        text-decoration: none;
+        transition-duration: $effect-on-duration;
+      }
+    }
+  }
+
+  .leaflet-control-mouseposition,
+  .leaflet-control-scale-line {
+    color: var(--text-color);
+    text-shadow: 1px 1px var(--bg-color);
+  }
+
+  .leaflet-control-layers,
+  .leaflet-control-reset,
+  .leaflet-control-zoom {
+    border: 1px solid var(--accent-color);
+    border-radius: $button-border-radius;
+  }
+
+  .leaflet-control-layers,
+  .leaflet-control-reset a,
+  .leaflet-control-zoom a {
+    background: var(--bg-color-alpha);
+  }
+
+  .leaflet-control-reset a,
+  .leaflet-control-zoom a {
+    border-radius: $button-border-radius - 1px;
+    color: var(--accent-color);
+    transition: $effect-duration ease-in-out {
+      property: background, color;
+    };
+
+    &:hover {
+      background: var(--accent-color-lightest);
+      transition-duration: $effect-on-duration;
+    }
+
+    &:active,
+    &.selected {
+      background: var(--accent-color);
+      color: var(--bg-color);
+      transition-duration: $effect-on-duration;
+    }
+
+    &.leaflet-disabled,
+    &.leaflet-disabled:active,
+    &.leaflet-disabled:hover {
+      background: var(--bg-color-alpha);
+      color: var(--accent-color-disabled);
+    }
+  }
+
+  .leaflet-control-zoom a {
+    &:first-child {
+      border-bottom-color: var(--accent-color-lighter);
+      border-bottom-left-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+
+    &:last-child {
+      border-top-left-radius: 0;
+      border-top-right-radius: 0;
+    }
+  }
+
+  .leaflet-control-layers label {
+    cursor: pointer;
+    font: $font-size-larger $font-family-headers;
+    padding: .125rem 0;
+
+    > span > span {
+      align-items: center;
+      display: flex;
+    }
+  }
+
+  .leaflet-control-layers-expanded {
+    background: var(--bg-color);
+    border-radius: $button-border-radius;
+    color: var(--text-color);
+    padding: .25rem .625rem;
+  }
+
+  .leaflet-control-layers-overlays label {
+    p {
+      color: var(--text-color-lighter);
+      font-size: .75rem;
+      margin: -.25rem 0 -.375rem 1.5rem;
+    }
+
+    > span > span {
+      align-items: baseline; // for Feature count
+    }
+  }
+
+  .leaflet-control-layers-separator {
+    border-top-color: var(--accent-color-lighter);
+    margin: .25rem -.625rem;
+  }
+
+  .leaflet-control-layers-toggle {
+    @include layer-icon($accent-color);
+  }
+
+  .leaflet-popup-close-button {
+    @include close-button;
+  }
+
+  .leaflet-popup-content {
+    color: var(--text-color);
+    font-size: $font-size;
+    line-height: normal;
+    margin: .75rem 1rem;
+  }
+
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip,
+  .leaflet-tooltip {
+    background: var(--bg-color);
+  }
+
+  .leaflet-popup-content-wrapper,
+  .leaflet-popup-tip {
+    box-shadow: 0 3px 14px var(--shadow-color-map);
+  }
+
+  .leaflet-popup-content-wrapper {
+    border-radius: $content-border-radius;
+  }
+
+  .leaflet-tooltip {
+    border: none;
+    border-radius: $button-border-radius;
+    box-shadow: 0 1px 3px var(--shadow-color-map);
+    color: var(--text-color);
+    padding: .5rem;
+    z-index: 10; // markers
+
+    &.mouseoverlayer {
+      z-index: 1; // faults
+    }
+  }
+
+  .leaflet-tooltip-left:before {
+    border-left-color: var(--bg-color);
+  }
+
+  .leaflet-tooltip-right:before {
+    border-right-color: var(--bg-color);
+  }
+
+  .leaflet-top .leaflet-control {
+    margin-top: 4.75rem;
+  }
+}

@@ -1,0 +1,12 @@
+@layer default {
+  #metadata {
+    section {
+      width: 12rem;
+    }
+
+    .columns {
+      display: flex;
+      gap: 5rem;
+    }
+  }
+}
