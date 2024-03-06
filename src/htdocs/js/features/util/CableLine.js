@@ -170,7 +170,7 @@ var CableLine = function (options) {
    */
   _onPopupOpen = function () {
     // Get the Popup's content (added via _this.addContent())
-    _app.Features.createFeatures('metadata', {
+    _app.Features.createFeatures('cable', {
       id: _this.id,
       name: _this.name
     });

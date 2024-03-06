@@ -11,12 +11,12 @@ var _MODULES = {
   base: [ // Features added when app is loaded
     CableLines
   ],
+  cable: [ // Features added when a cable is selected
+    Metadata
+  ],
   experiment: [ // Features added when an experiment is selected
     Earthquakes,
     Experiment
-  ],
-  metadata: [ // Features added when a CableLine is selected
-    Metadata
   ]
 };
 
@@ -74,7 +74,7 @@ var Features = function (options) {
    * @param id {String}
    *     Feature id
    *
-   * @return match {String <base|experiment|metadata>} default is ''
+   * @return match {String <base|cable|experiment>} default is ''
    */
   _getMode = function (id) {
     var match = ''; // default
@@ -127,9 +127,9 @@ var Features = function (options) {
 
     _features = {
       base: base || {}, // leave existing 'base' Features intact
+      cable: {},
       experiment: {},
-      loading: {}, // temporary storage for Features that aren't ready
-      metadata: {}
+      loading: {} // temporary storage for Features that aren't ready
     };
   };
 
@@ -175,11 +175,11 @@ var Features = function (options) {
    *
    *       Auto-set props:
    *
-   *         mode: {String <base|experiment|metadata>} display mode
-   *         status: {String} <error|initialized|loading|ready> loading status
+   *         mode: {String <base|cable>|experiment} display mode
+   *         status: {String <error|initialized|loading|ready>} loading status
    *         updated: {Number} fetch/creation time (milliseconds)
    *     }
-   * @param mode {String <base|experiment|metadata>}
+   * @param mode {String <base|cable|experiment>}
    * @param opts {Object} optional; default is {}
    *
    * @return feature {Object}
@@ -218,7 +218,7 @@ var Features = function (options) {
   /**
    * Wrapper method that creates all of the Features for the given display mode.
    *
-   * @param mode {String <base|experiment|metadata>}
+   * @param mode {String <base|cable|experiment>}
    * @param opts {Object} default is {}
    */
   _this.createFeatures = function (mode, opts = {}) {
@@ -272,7 +272,7 @@ var Features = function (options) {
   /**
    * Get all Features matching the given display mode, keyed by their id values.
    *
-   * @param mode {String <base|experiment|metadata>} default is 'experiment'
+   * @param mode {String <base|cable|experiment>} default is 'experiment'
    *
    * @return {Object}
    */
@@ -284,7 +284,7 @@ var Features = function (options) {
    * Get the collective loading status of all Features for the given display
    * mode.
    *
-   * @param mode {String <base|experiment|metadata>} default is 'experiment'
+   * @param mode {String <base|cable|experiment>} default is 'experiment'
    *
    * @return status {String}
    */
