@@ -88,8 +88,8 @@ var CableLine = function (options) {
    */
   _addListeners = function () {
     _this.mapLayer.on({
-      popupopen: _onPopupOpen,
-      popupclose: _onPopupClose
+      popupclose: _onPopupClose,
+      popupopen: _onPopupOpen
     });
   };
 
@@ -201,8 +201,8 @@ var CableLine = function (options) {
    */
   _removeListeners = function () {
     _this.mapLayer.off({
-      popupopen: _onPopupOpen,
-      popupclose: _onPopupClose
+      popupclose: _onPopupClose,
+      popupopen: _onPopupOpen
     });
   };
 
