@@ -30,7 +30,6 @@ var CableLine = function (options) {
       _initialize,
 
       _app,
-      _popup,
 
       _addExperiment,
       _addListeners,
@@ -42,7 +41,7 @@ var CableLine = function (options) {
       _removeListeners,
       _showMetadata,
       _style,
-      _toggleLayers;
+      _toggleExperiment;
 
 
   _this = {};
@@ -136,13 +135,16 @@ var CableLine = function (options) {
 
   /**
    * Event handler for closing a Popup.
+   *
+   * @param e {Event}
    */
-  _onPopupClose = function () {
-    var maplayers = _popup.querySelectorAll('.maplayers'),
-        metadata = _popup.querySelectorAll('.metadata');
+  _onPopupClose = function (e) {
+    var el = e.popup.getElement(),
+        maplayers = el.querySelectorAll('.maplayers'),
+        metadata = el.querySelectorAll('.metadata');
 
     maplayers.forEach(button =>
-      button.removeEventListener('click', _toggleLayers)
+      button.removeEventListener('click', _toggleExperiment)
     );
 
     metadata.forEach(button =>
@@ -162,7 +164,7 @@ var CableLine = function (options) {
   };
 
   /**
-   * Remove an existing experiment's layers.
+   * Remove the existing experiment's Features.
    */
   _removeExperiment = function () {
     var features = _app.Features,
@@ -224,9 +226,9 @@ var CableLine = function (options) {
    *
    * @param e {Event}
    */
-  _toggleLayers = function (e) {
-    var tr = e.target.closest('tr'),
-        button = tr.querySelector('.maplayers'), // clicked button
+  _toggleExperiment = function (e) {
+    var button = e.target,
+        tr = button.closest('tr'),
         buttons = tr.closest('table').querySelectorAll('.maplayers'),
         id = tr.className;
 
@@ -258,18 +260,15 @@ var CableLine = function (options) {
   _this.addContent = function (html) {
     var maplayers, metadata,
         cable = sessionStorage.getItem('cable'),
-        experiment = sessionStorage.getItem('experiment'),
-        popup = _this.mapLayer.getPopup();
+        popup = _this.mapLayer.getPopup(),
+        el = popup.getElement(),
+        experiment = sessionStorage.getItem('experiment');
 
-    // Hack to manage listeners (for opening a Popup w/o closing prev. Popup)
-    _popup = document.createElement('div'); // must use Element instead of String
-    _popup.innerHTML = html;
-
-    popup.setContent(_popup).update();
+    popup.setContent(html).update();
 
     // Add event listeners and highlight selected button (if applicable)
-    maplayers = _popup.querySelectorAll('.maplayers');
-    metadata = _popup.querySelectorAll('.metadata');
+    maplayers = el.querySelectorAll('.maplayers');
+    metadata = el.querySelectorAll('.metadata');
 
     maplayers.forEach(button => {
       var id = button.closest('tr').className;
@@ -278,7 +277,7 @@ var CableLine = function (options) {
         button.classList.add('selected');
       }
 
-      button.addEventListener('click', _toggleLayers);
+      button.addEventListener('click', _toggleExperiment);
     });
 
     metadata.forEach(button =>
@@ -293,7 +292,6 @@ var CableLine = function (options) {
     _initialize = null;
 
     _app = null;
-    _popup = null;
 
     _addExperiment = null;
     _addListeners = null;
@@ -305,7 +303,7 @@ var CableLine = function (options) {
     _removeListeners = null;
     _showMetadata = null;
     _style = null;
-    _toggleLayers = null;
+    _toggleExperiment = null;
 
     _this = null;
   };
