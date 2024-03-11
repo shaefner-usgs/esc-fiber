@@ -74,6 +74,7 @@ _MARKERS = {
  *       count: {Number}
  *       description: {String}
  *       destroy: {Function}
+ *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.GeoJSON}
  *       name: {String}
@@ -91,7 +92,6 @@ var Earthquakes = function (options) {
 
       _addBubbles,
       _deleteParams,
-      _fetch,
       _getAge,
       _getEq,
       _getFillColor,
@@ -129,8 +129,6 @@ var Earthquakes = function (options) {
       minmagnitude: options.minmagnitude,
       starttime: options.starttime
     });
-
-    _fetch();
   };
 
   /**
@@ -206,18 +204,6 @@ var Earthquakes = function (options) {
       delete params.longitude;
       delete params.maxradiuskm;
     }
-  };
-
-  /**
-   * Fetch the feed data.
-   */
-  _fetch = function () {
-    _this.mapLayer = L.geoJSON.async(_this.url, {
-      app: _app,
-      feature: _this,
-      onEachFeature: _onEachFeature,
-      pointToLayer: _pointToLayer
-    });
   };
 
   /**
@@ -499,7 +485,6 @@ var Earthquakes = function (options) {
 
     _addBubbles = null;
     _deleteParams = null;
-    _fetch = null;
     _getAge = null;
     _getEq = null;
     _getFillColor = null;
@@ -512,6 +497,18 @@ var Earthquakes = function (options) {
     _pointToLayer = null;
 
     _this = null;
+  };
+
+  /**
+   * Fetch the feed data.
+   */
+  _this.fetch = function () {
+    _this.mapLayer = L.geoJSON.async(_this.url, {
+      app: _app,
+      feature: _this,
+      onEachFeature: _onEachFeature,
+      pointToLayer: _pointToLayer
+    });
   };
 
   /**

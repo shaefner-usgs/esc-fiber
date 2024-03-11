@@ -17,6 +17,7 @@
  *     {
  *       cable: {String}
  *       destroy: {Function}
+ *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.GeoJSON}
  *       name: {String}
@@ -31,7 +32,6 @@ var Experiment = function (options) {
 
       _app,
 
-      _fetch,
       _onEachFeature,
       _pointToLayer;
 
@@ -47,20 +47,6 @@ var Experiment = function (options) {
     _this.id = 'experiment';
     _this.name = `${options.name} Experiment ${number}`;
     _this.url = `json/${options.cable}-${options.experiment}.geojson`;
-
-    _fetch();
-  };
-
-  /**
-   * Fetch the feed data.
-   */
-  _fetch = function () {
-    _this.mapLayer = L.geoJSON.async(_this.url, {
-      app: _app,
-      feature: _this,
-      onEachFeature: _onEachFeature,
-      pointToLayer: _pointToLayer
-    });
   };
 
   /**
@@ -102,11 +88,22 @@ var Experiment = function (options) {
 
     _app = null;
 
-    _fetch = null;
     _onEachFeature = null;
     _pointToLayer = null;
 
     _this = null;
+  };
+
+  /**
+   * Fetch the feed data.
+   */
+  _this.fetch = function () {
+    _this.mapLayer = L.geoJSON.async(_this.url, {
+      app: _app,
+      feature: _this,
+      onEachFeature: _onEachFeature,
+      pointToLayer: _pointToLayer
+    });
   };
 
   /**

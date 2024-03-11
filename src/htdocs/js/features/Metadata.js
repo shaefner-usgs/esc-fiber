@@ -21,6 +21,7 @@ var AppUtil = require('util/AppUtil'),
  *     {
  *       data: {Object}
  *       destroy: {Function}
+ *       fetch: {Function}
  *       getContent: {Function}
  *       id: {String}
  *       lightbox: {Object}
@@ -36,7 +37,6 @@ var Metadata = function (options) {
       _app,
       _cable,
 
-      _fetch,
       _getData,
       _getPopup;
 
@@ -58,18 +58,6 @@ var Metadata = function (options) {
       title: _this.name
     });
     _this.url = `json/${_cable.id}.json`;
-
-    _fetch();
-  };
-
-  /**
-   * Fetch the feed data.
-   */
-  _fetch = function () {
-    L.geoJSON.async(_this.url, {
-      app: _app,
-      feature: _this
-    });
   };
 
   /**
@@ -169,11 +157,20 @@ var Metadata = function (options) {
     _app = null;
     _cable = null;
 
-    _fetch = null;
     _getData = null;
     _getPopup = null;
 
     _this = null;
+  };
+
+  /**
+   * Fetch the feed data.
+   */
+  _this.fetch = function () {
+    L.geoJSON.async(_this.url, {
+      app: _app,
+      feature: _this
+    });
   };
 
   /**

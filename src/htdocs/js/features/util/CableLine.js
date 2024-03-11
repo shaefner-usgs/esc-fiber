@@ -16,6 +16,7 @@
  *     {
  *       addContent: {Function}
  *       destroy: {Function}
+ *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.FeatureGroup}
  *       name: {String}
@@ -33,7 +34,6 @@ var CableLine = function (options) {
 
       _addExperiment,
       _addListeners,
-      _fetch,
       _getPoints,
       _getPopup,
       _onPopupClose,
@@ -54,8 +54,6 @@ var CableLine = function (options) {
     _this.mapLayer = L.featureGroup(); // polyline and points
     _this.name = options.name;
     _this.url = `json/${_this.id}.geojson`;
-
-    _fetch();
   };
 
   /**
@@ -91,19 +89,6 @@ var CableLine = function (options) {
       popupclose: _onPopupClose,
       popupopen: _onPopupOpen
     });
-  };
-
-  /**
-   * Fetch the feed data and add its map layer.
-   */
-  _fetch = function () {
-    var line = L.geoJSON.async(_this.url, {
-      app: _app,
-      feature: _this,
-      style: _style
-    });
-
-    _this.mapLayer.addLayer(line);
   };
 
   /**
@@ -312,7 +297,6 @@ var CableLine = function (options) {
 
     _addExperiment = null;
     _addListeners = null;
-    _fetch = null;
     _getPoints = null;
     _getPopup = null;
     _onPopupClose = null;
@@ -324,6 +308,19 @@ var CableLine = function (options) {
     _toggleLayers = null;
 
     _this = null;
+  };
+
+  /**
+   * Fetch the feed data and add its map layer.
+   */
+  _this.fetch = function () {
+    var line = L.geoJSON.async(_this.url, {
+      app: _app,
+      feature: _this,
+      style: _style
+    });
+
+    _this.mapLayer.addLayer(line);
   };
 
   /**

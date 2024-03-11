@@ -202,11 +202,15 @@ var Features = function (options) {
       _modules[feature.id] = module;
 
       if (feature.deferFetch || !feature.url) {
-        _this.storeFeature(feature); // Feature ready; no data to load
+        _this.storeFeature(feature); // Feature is 'ready' (no data to load)
 
         if (feature.render) {
           feature.render();
         }
+      }
+
+      if (feature.fetch && !feature.deferFetch) {
+        feature.fetch(); // Feature rendered when fetched data is returned
       }
     } catch (error) {
       console.error(error);
