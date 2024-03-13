@@ -57,9 +57,13 @@ var Features = function (options) {
       _features,
       _modules,
       _opts,
+      _queue,
 
+      _checkDependencies,
+      _clearQueue,
       _getMode,
       _getOptions,
+      _handleFeature,
       _initFeatures,
       _removeFeatures;
 
@@ -70,8 +74,41 @@ var Features = function (options) {
     _app = options.app;
     _modules = {};
     _opts = {};
+    _queue = [];
 
     _initFeatures();
+  };
+
+  /**
+   * Check if the dependencies for the given Feature are ready (if applicable).
+   *
+   * @param feature {Object}
+   *
+   * @return status {String}
+   */
+  _checkDependencies = function (feature) {
+    var status = 'ready'; // default
+
+    if (Array.isArray(feature.dependencies)) { // load dependencies first
+      feature.dependencies.forEach(id => {
+        var dependency = _this.getFeature(id);
+
+        if (dependency.status !== 'ready') {
+          status = dependency.status;
+        }
+      });
+    }
+
+    return status;
+  };
+
+  /**
+   * Clear the queue of dependent Features waiting to be fetched.
+   */
+  _clearQueue = function () {
+    _queue.forEach(timer => clearTimeout(timer));
+
+    _queue = [];
   };
 
   /**
@@ -119,6 +156,28 @@ var Features = function (options) {
     }
 
     return opts;
+  };
+
+  /**
+   * Fetch and/or render the given Feature.
+   *
+   * @param feature {Object}
+   */
+  _handleFeature = function (feature) {
+    var status = _checkDependencies(feature);
+
+    if (status === 'ready') {
+      if (feature.fetch && !feature.deferFetch) {
+        feature.fetch(); // Feature rendered when fetched data is returned
+      }
+      if (feature.render && !feature.url) {
+        feature.render();
+      }
+    } else { // dependencies not ready
+      _queue.push(setTimeout(() => {
+        _handleFeature(feature);
+      }, 100));
+    }
   };
 
   /**
@@ -210,15 +269,9 @@ var Features = function (options) {
 
       if (feature.deferFetch || !feature.url) {
         _this.storeFeature(feature); // Feature is 'ready' (no data to load)
-
-        if (feature.render) {
-          feature.render();
-        }
       }
 
-      if (feature.fetch && !feature.deferFetch) {
-        feature.fetch(); // Feature rendered when fetched data is returned
-      }
+      _handleFeature(feature);
     } catch (error) {
       console.error(error);
     }
@@ -342,6 +395,7 @@ var Features = function (options) {
    * Reset to default state.
    */
   _this.reset = function () {
+    _clearQueue();
     _removeFeatures();
     _initFeatures();
   };
