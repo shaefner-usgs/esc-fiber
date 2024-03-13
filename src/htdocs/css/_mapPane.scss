@@ -33,6 +33,9 @@
     .leaflet-earthquakes-pane {
       z-index: 423;
     }
+    .leaflet-shakemap-contours-pane {
+      z-index: 422;
+    }
 
     // Hide attribution text on (small screen) mobile devices
     @media only screen and (max-width: $breakpoint-tablet-width) {
