@@ -2,9 +2,11 @@
 
 
 var CableLines = require('features/CableLines'),
+    Earthquake = require('features/Earthquake'),
     Earthquakes = require('features/Earthquakes'),
     Experiment = require('features/Experiment'),
-    Metadata = require('features/Metadata');
+    Metadata = require('features/Metadata'),
+    ShakeMapContours = require('features/ShakeMapContours');
 
 
 var _MODULES = {
@@ -17,6 +19,10 @@ var _MODULES = {
   experiment: [ // Features added when an experiment is selected
     Earthquakes,
     Experiment
+  ],
+  shakemap: [ // Features added when a ShakeMap is selected
+    Earthquake,
+    ShakeMapContours
   ]
 };
 
@@ -74,7 +80,7 @@ var Features = function (options) {
    * @param id {String}
    *     Feature id
    *
-   * @return match {String <base|cable|experiment>} default is ''
+   * @return match {String <base|cable|experiment|shakemap>} default is ''
    */
   _getMode = function (id) {
     var match = ''; // default
@@ -129,7 +135,8 @@ var Features = function (options) {
       base: base || {}, // leave existing 'base' Features intact
       cable: {},
       experiment: {},
-      loading: {} // temporary storage for Features that aren't ready
+      loading: {}, // temporary storage for Features that aren't ready
+      shakemap: {}
     };
   };
 
@@ -175,11 +182,11 @@ var Features = function (options) {
    *
    *       Auto-set props:
    *
-   *         mode: {String <base|cable>|experiment} display mode
+   *         mode: {String <base|cable|experiment|shakemap>} display mode
    *         status: {String <error|initialized|loading|ready>} loading status
    *         updated: {Number} fetch/creation time (milliseconds)
    *     }
-   * @param mode {String <base|cable|experiment>}
+   * @param mode {String <base|cable|experiment|shakemap>}
    * @param opts {Object} optional; default is {}
    *
    * @return feature {Object}
@@ -222,7 +229,7 @@ var Features = function (options) {
   /**
    * Wrapper method that creates all of the Features for the given display mode.
    *
-   * @param mode {String <base|cable|experiment>}
+   * @param mode {String <base|cable|experiment|shakemap>}
    * @param opts {Object} default is {}
    */
   _this.createFeatures = function (mode, opts = {}) {
@@ -276,7 +283,7 @@ var Features = function (options) {
   /**
    * Get all Features matching the given display mode, keyed by their id values.
    *
-   * @param mode {String <base|cable|experiment>} default is 'experiment'
+   * @param mode {String <base|cable|experiment|shakemap>} default is 'experiment'
    *
    * @return {Object}
    */
@@ -288,7 +295,7 @@ var Features = function (options) {
    * Get the collective loading status of all Features for the given display
    * mode.
    *
-   * @param mode {String <base|cable|experiment>} default is 'experiment'
+   * @param mode {String <base|cable|experiment|shakemap>} default is 'experiment'
    *
    * @return status {String}
    */
