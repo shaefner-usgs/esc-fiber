@@ -168,8 +168,10 @@ var CableLine = function (options) {
    */
   _removeExperiment = function () {
     var features = _app.Features,
+        earthquake = features.getFeature('earthquake'),
         earthquakes = features.getFeature('earthquakes'),
-        experiment = features.getFeature('experiment');
+        experiment = features.getFeature('experiment'),
+        shakemap = features.getFeature('shakemap-contours');
 
     if (features.isFeature(earthquakes)) {
       earthquakes.remove();
@@ -180,6 +182,14 @@ var CableLine = function (options) {
       experiment.remove();
       experiment.destroy();
       features.deleteFeature(experiment.id);
+    }
+    if (features.isFeature(shakemap)) {
+      earthquake.destroy();
+      features.deleteFeature(earthquake.id);
+
+      shakemap.remove();
+      shakemap.destroy();
+      features.deleteFeature(shakemap.id);
     }
   };
 
