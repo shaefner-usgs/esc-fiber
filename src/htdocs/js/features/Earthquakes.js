@@ -55,7 +55,7 @@ _MARKERS = {
  *     {
  *       app: {Object} Application
  *       cable: {String} cable id
- *       colorBy: {String <age|depth>}
+ *       colorBy: {String <age|depth>} optional
  *       endtime: {ISO Date} optional
  *       latitude: {Number} optional
  *       longitude: {Number} optional
