@@ -91,6 +91,7 @@ var Earthquakes = function (options) {
       _colorBy,
 
       _addBubbles,
+      _addShakeMap,
       _deleteParams,
       _getAge,
       _getEq,
@@ -101,7 +102,11 @@ var Earthquakes = function (options) {
       _getTooltip,
       _getUrl,
       _onEachFeature,
-      _pointToLayer;
+      _onPopupClose,
+      _onPopupOpen,
+      _pointToLayer,
+      _removeShakeMap,
+      _toggleShakeMap;
 
 
   _this = {};
@@ -189,6 +194,17 @@ var Earthquakes = function (options) {
   };
 
   /**
+   * Create and add the given earthquake's ShakeMap Contours.
+   *
+   * @param eqid {String}
+   */
+  _addShakeMap = function (eqid) {
+    _app.Features.createFeatures('shakemap', {
+      eqid: eqid
+    });
+  };
+
+  /**
    * Delete extraneous location parameters (use a circle or rectangle, not both).
    *
    * @param params {Object}
@@ -240,7 +256,7 @@ var Earthquakes = function (options) {
    * @return eq {Object}
    */
   _getEq = function (feature) {
-    var eq, localTimeDisplay, statusIcon,
+    var eq, localTimeDisplay, shakemap, statusIcon,
         props = feature.properties || {},
         cdi = AppUtil.romanize(Number(props.cdi) || ''),
         coords = feature.geometry?.coordinates || [0, 0, 0],
@@ -261,6 +277,10 @@ var Earthquakes = function (options) {
 
     if (props.place) {
       title += '—' + props.place;
+    }
+
+    if (props.types.split(',').includes('shakemap')) {
+      shakemap = '<a class="shakemap button">ShakeMap</a>';
     }
 
     if (props.tz) { // local time (at epicenter)
@@ -290,6 +310,7 @@ var Earthquakes = function (options) {
       magType: magType,
       mmi: mmi || '', // ShakeMap
       radius: _getRadius(mag),
+      shakemap: shakemap || '',
       status: status,
       statusIcon: statusIcon || '',
       title: title,
@@ -365,6 +386,7 @@ var Earthquakes = function (options) {
           '<dt class="status">Status</dt>' +
           '<dd class="status">{status}{statusIcon}</dd>' +
         '</dl>' +
+        '{shakemap}' +
       '</div>',
       eq
     );
@@ -452,6 +474,45 @@ var Earthquakes = function (options) {
   };
 
   /**
+   * Event handler for closing a Popup.
+   *
+   * @param e {Event}
+   */
+  _onPopupClose = function (e) {
+    var button = e.popup.getElement().querySelector('.shakemap');
+
+    if (button) {
+      button.removeEventListener('click', _toggleShakeMap);
+    }
+  };
+
+  /**
+   * Event handler for opening a Popup.
+   *
+   * @param e {Event}
+   */
+  _onPopupOpen = function (e) {
+    var button = e.popup.getElement().querySelector('.shakemap'),
+        marker = e.layer;
+
+    marker.openPopup(marker.getLatLng()); // position at Marker center
+
+    if (button) {
+      button.id = marker.feature.id; // eqid
+
+      button.classList.add('no-animation'); // conceal (de)selection of button
+
+      if (button.id === sessionStorage.getItem('shakemap')) {
+        button.classList.add('selected');
+      } else {
+        button.classList.remove('selected');
+      }
+
+      button.addEventListener('click', _toggleShakeMap);
+    }
+  };
+
+  /**
    * Create the Leaflet Markers.
    *
    * @param feature {Object}
@@ -470,6 +531,47 @@ var Earthquakes = function (options) {
     return L.circleMarker(latlng, opts);
   };
 
+  /**
+   * Remove the existing ShakeMap Contours.
+   */
+  _removeShakeMap = function () {
+    var features = _app.Features,
+        earthquake = features.getFeature('earthquake'),
+        shakemap = features.getFeature('shakemap-contours');
+
+    if (features.isFeature(shakemap)) {
+      earthquake.destroy();
+      features.deleteFeature(earthquake.id);
+
+      shakemap.remove();
+      shakemap.destroy();
+      features.deleteFeature(shakemap.id);
+    }
+  };
+
+  /**
+   * Event handler for toggling the ShakeMap Contours map layer.
+   *
+   * @param e {Event}
+   */
+  _toggleShakeMap = function (e) {
+    var button = e.target;
+
+    button.classList.remove('no-animation');
+
+    _removeShakeMap();
+
+    if (button.classList.contains('selected')) { // turn off
+      button.classList.remove('selected');
+      sessionStorage.removeItem('shakemap');
+    } else {
+      button.classList.add('selected');
+      sessionStorage.setItem('shakemap', button.id);
+
+      _addShakeMap(button.id);
+    }
+  };
+
   // ----------------------------------------------------------
   // Public methods
   // ----------------------------------------------------------
@@ -484,6 +586,7 @@ var Earthquakes = function (options) {
     _colorBy = null;
 
     _addBubbles = null;
+    _addShakeMap = null;
     _deleteParams = null;
     _getAge = null;
     _getEq = null;
@@ -494,7 +597,11 @@ var Earthquakes = function (options) {
     _getTooltip = null;
     _getUrl = null;
     _onEachFeature = null;
+    _onPopupClose = null;
+    _onPopupOpen = null;
     _pointToLayer = null;
+    _removeShakeMap = null;
+    _toggleShakeMap = null;
 
     _this = null;
   };
@@ -515,6 +622,11 @@ var Earthquakes = function (options) {
    * Remove the Feature.
    */
   _this.remove = function () {
+    _this.mapLayer.off({
+      popupclose: _onPopupClose,
+      popupopen: _onPopupOpen
+    });
+
     _app.MapPane.removeFeature(_this);
   };
 
@@ -522,9 +634,14 @@ var Earthquakes = function (options) {
    * Render the Feature.
    */
   _this.render = function (json) {
+    _this.count = json.features.length;
+
     _app.MapPane.addFeature(_this);
 
-    _this.count = json.features.length;
+    _this.mapLayer.on({
+      popupclose: _onPopupClose,
+      popupopen: _onPopupOpen
+    });
   };
 
 
