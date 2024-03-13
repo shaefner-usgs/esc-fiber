@@ -148,14 +148,14 @@ var MapPane = function (options) {
   };
 
   /**
-   * Set _bounds to contain all of the selected experiment's Features.
+   * Set _bounds to contain the given Feature.
    *
    * @param feature {Object}
    */
   _setBounds = function (feature) {
     var bounds = feature.mapLayer.getBounds();
 
-    if (feature.cable !== _cable) {
+    if (feature.mode === 'experiment' && feature.cable !== _cable) {
       _bounds = bounds;
       _cable = feature.cable;
     } else {
