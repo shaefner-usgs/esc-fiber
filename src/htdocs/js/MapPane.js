@@ -192,9 +192,10 @@ var MapPane = function (options) {
     var status = _app.Features.getStatus(feature.mode);
 
     if (feature.mode === 'experiment') {
-      _setBounds(feature);
       _setPopup(status);
     }
+
+    _setBounds(feature);
 
     if (status === 'ready' && _bounds.isValid()) {
       _this.fitBounds();
