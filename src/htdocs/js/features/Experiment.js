@@ -17,6 +17,7 @@
  *     {
  *       cable: {String}
  *       destroy: {Function}
+ *       experiment: {String}
  *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.GeoJSON}
@@ -44,6 +45,7 @@ var Experiment = function (options) {
     _app = options.app;
 
     _this.cable = options.cable;
+    _this.experiment = options.experiment;
     _this.id = 'experiment';
     _this.name = `${options.name} Experiment ${number}`;
     _this.url = `json/${options.cable}-${options.experiment}.geojson`;
