@@ -52,7 +52,7 @@ var CableLine = function (options) {
     _this.id = options.id;
     _this.mapLayer = L.featureGroup(); // polyline and points
     _this.name = options.name;
-    _this.url = `json/${_this.id}.geojson`;
+    _this.url = `json/${options.id}.geojson`;
   };
 
   /**
@@ -158,7 +158,7 @@ var CableLine = function (options) {
   _onPopupOpen = function () {
     // Get the Popup's content (added via _this.addContent())
     _app.Features.createFeatures('cable', {
-      id: _this.id,
+      cable: _this.id,
       name: _this.name
     });
   };
