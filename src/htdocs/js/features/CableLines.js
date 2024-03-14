@@ -75,7 +75,7 @@ var CableLines = function (options) {
       },
       {
         id: 'cordova',
-        name: 'Cordova, Alaska'
+        name: 'Cordova, AK'
       },
       {
         id: 'calipatria',
