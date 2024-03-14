@@ -13,12 +13,13 @@ var AppUtil = require('util/AppUtil'),
  * @param options {Object}
  *     {
  *       app: {Object} Application
- *       id: {String} cable id
+ *       cable: {String} cable id
  *       name: {String} cable name
  *     }
  *
  * @return _this {Object}
  *     {
+ *       cable: {String}
  *       data: {Object}
  *       destroy: {Function}
  *       fetch: {Function}
@@ -35,7 +36,6 @@ var Metadata = function (options) {
       _initialize,
 
       _app,
-      _cable,
 
       _getData,
       _getPopup;
@@ -45,19 +45,15 @@ var Metadata = function (options) {
 
   _initialize = function (options = {}) {
     _app = options.app;
-    _cable = {
-      id: options.id,
-      name: options.name
-    };
 
+    _this.cable = options.cable;
     _this.data = {};
     _this.id = 'metadata';
-    _this.name = 'Experiments Metadata';
+    _this.name = options.name + ' Experiments';
     _this.lightbox = Lightbox({
-      id: _this.id,
-      title: _this.name
+      id: _this.id
     });
-    _this.url = `json/${_cable.id}.json`;
+    _this.url = `json/${options.cable}.json`;
   };
 
   /**
@@ -114,7 +110,7 @@ var Metadata = function (options) {
   _getPopup = function () {
     var html =
       '<div class="cablelines">' +
-        `<h4>${_cable.name} Experiments</h4>`;
+        `<h4>${_this.name}</h4>`;
 
     if (AppUtil.isEmpty(_this.data)) {
       html += '<p>None</p>';
@@ -155,7 +151,6 @@ var Metadata = function (options) {
     _initialize = null;
 
     _app = null;
-    _cable = null;
 
     _getData = null;
     _getPopup = null;
@@ -253,7 +248,7 @@ var Metadata = function (options) {
    * @param json {Object} default is {}
    */
   _this.render = function (json = {}) {
-    var cable = _app.Features.getFeature(_cable.id),
+    var cable = _app.Features.getFeature(_this.cable),
         lightbox = document.getElementById(_this.id);
 
     _this.data = _getData(json);
