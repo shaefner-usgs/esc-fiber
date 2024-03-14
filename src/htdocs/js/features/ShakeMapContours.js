@@ -14,6 +14,7 @@
  *     {
  *       dependencies: {Array}
  *       destroy: {Function}
+ *       eqid: {String}
  *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.GeoJSON}
@@ -40,6 +41,7 @@ var ShakeMapContours = function (options) {
     _app = options.app;
 
     _this.dependencies = ['earthquake'];
+    _this.eqid = ''; // set by Earthquake Feature
     _this.id = 'shakemap-contours';
     _this.name = 'ShakeMap Contours';
     _this.url = ''; // set by Earthquake Feature
