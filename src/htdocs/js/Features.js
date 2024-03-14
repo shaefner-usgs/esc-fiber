@@ -17,8 +17,8 @@ var _MODULES = {
     Metadata
   ],
   experiment: [ // Features added when an experiment is selected
-    Earthquakes,
-    Experiment
+    Experiment,
+    Earthquakes
   ],
   shakemap: [ // Features added when a ShakeMap is selected
     Earthquake,
