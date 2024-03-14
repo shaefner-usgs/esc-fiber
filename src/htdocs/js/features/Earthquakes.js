@@ -57,6 +57,7 @@ _MARKERS = {
  *       cable: {String} cable id
  *       colorBy: {String <age|depth>} optional
  *       endtime: {ISO Date} optional
+ *       experiment: {String} experiment id
  *       latitude: {Number} optional
  *       longitude: {Number} optional
  *       maxlatitude: {Number} optional
@@ -73,6 +74,7 @@ _MARKERS = {
  *       cable: {String}
  *       count: {Number}
  *       description: {String}
+ *       experiment: {String}
  *       destroy: {Function}
  *       fetch: {Function}
  *       id: {String}
@@ -119,7 +121,8 @@ var Earthquakes = function (options) {
 
     _this.cable = options.cable;
     _this.count = 0;
-    _this.description = `within ${options.maxradiuskm} km`;
+    _this.description = ''; // default
+    _this.experiment = options.experiment;
     _this.id = 'earthquakes';
     _this.name = 'M 0+ Earthquakes';
     _this.url = _getUrl({
@@ -134,6 +137,10 @@ var Earthquakes = function (options) {
       minmagnitude: options.minmagnitude,
       starttime: options.starttime
     });
+
+    if (options.maxradiuskm) {
+      _this.description = `within ${options.maxradiuskm} km`;
+    }
   };
 
   /**
