@@ -126,7 +126,7 @@ var Metadata = function (options) {
             '<td>{startdate}</td>' +
             '<td>{enddate}</td>' +
             '<td><a class="button maplayers">Map Layers</a></td>' +
-            '<td><a class="button metadata">Details</a></td>' +
+            '<td><a class="button details">Details</a></td>' +
           '</tr>',
           _this.data[id]
         );

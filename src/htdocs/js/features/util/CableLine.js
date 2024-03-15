@@ -39,7 +39,7 @@ var CableLine = function (options) {
       _onPopupOpen,
       _removeExperiment,
       _selectButton,
-      _showMetadata,
+      _showDetails,
       _style,
       _toggleExperiment;
 
@@ -86,16 +86,16 @@ var CableLine = function (options) {
    * @param el {Element}
    */
   _addListeners = function (el) {
-    var maplayers = el.querySelectorAll('.maplayers'),
-        metadata = el.querySelectorAll('.metadata');
+    var details = el.querySelectorAll('.details'),
+        maplayers = el.querySelectorAll('.maplayers');
+
+    details.forEach(button =>
+      button.addEventListener('click', _showDetails)
+    );
 
     maplayers.forEach(button => {
       button.addEventListener('click', _toggleExperiment);
     });
-
-    metadata.forEach(button =>
-      button.addEventListener('click', _showMetadata)
-    );
   };
 
   /**
@@ -148,15 +148,15 @@ var CableLine = function (options) {
    */
   _onPopupClose = function (e) {
     var el = e.popup.getElement(),
-        maplayers = el.querySelectorAll('.maplayers'),
-        metadata = el.querySelectorAll('.metadata');
+        details = el.querySelectorAll('.details'),
+        maplayers = el.querySelectorAll('.maplayers');
+
+    details.forEach(button =>
+      button.removeEventListener('click', _showDetails)
+    );
 
     maplayers.forEach(button =>
       button.removeEventListener('click', _toggleExperiment)
-    );
-
-    metadata.forEach(button =>
-      button.removeEventListener('click', _showMetadata)
     );
   };
 
@@ -235,7 +235,7 @@ var CableLine = function (options) {
    *
    * @param e {Event}
    */
-  _showMetadata = function (e) {
+  _showDetails = function (e) {
     var id = e.target.closest('tr').className,
         metadata = _app.Features.getFeature('metadata'),
         content = metadata.getContent(id),
@@ -319,7 +319,7 @@ var CableLine = function (options) {
     _onPopupOpen = null;
     _removeExperiment = null;
     _selectButton = null;
-    _showMetadata = null;
+    _showDetails = null;
     _style = null;
     _toggleExperiment = null;
 
