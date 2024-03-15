@@ -38,7 +38,7 @@ var CableLine = function (options) {
       _onPopupClose,
       _onPopupOpen,
       _removeExperiment,
-      _removeListeners,
+      _selectButton,
       _showMetadata,
       _style,
       _toggleExperiment;
@@ -82,12 +82,20 @@ var CableLine = function (options) {
 
   /**
    * Add event listeners.
+   *
+   * @param el {Element}
    */
-  _addListeners = function () {
-    _this.mapLayer.on({
-      popupclose: _onPopupClose,
-      popupopen: _onPopupOpen
+  _addListeners = function (el) {
+    var maplayers = el.querySelectorAll('.maplayers'),
+        metadata = el.querySelectorAll('.metadata');
+
+    maplayers.forEach(button => {
+      button.addEventListener('click', _toggleExperiment);
     });
+
+    metadata.forEach(button =>
+      button.addEventListener('click', _showMetadata)
+    );
   };
 
   /**
@@ -154,13 +162,23 @@ var CableLine = function (options) {
 
   /**
    * Event handler for opening a Popup.
+   *
+   * @param e {Event}
    */
-  _onPopupOpen = function () {
-    // Get the Popup's content (added via _this.addContent())
-    _app.Features.createFeatures('cable', {
-      cable: _this.id,
-      name: _this.name
-    });
+  _onPopupOpen = function (e) {
+    var el = e.popup.getElement(),
+        metadata = _app.Features.getFeature('metadata');
+
+    // Get the Popup's content (added via _this.addContent()) and/or add listeners
+    if (_this.id !== metadata.cable) {
+      _app.Features.createFeatures('cable', {
+        cable: _this.id,
+        name: _this.name
+      });
+    } else {
+      _addListeners(el);
+      _selectButton(el);
+    }
   };
 
   /**
@@ -194,12 +212,21 @@ var CableLine = function (options) {
   };
 
   /**
-   * Remove event listeners.
+   * Select the active map layers' button (if applicable).
+   *
+   * @param el {Element}
    */
-  _removeListeners = function () {
-    _this.mapLayer.off({
-      popupclose: _onPopupClose,
-      popupopen: _onPopupOpen
+  _selectButton = function (el) {
+    var cable = sessionStorage.getItem('cable'),
+        experiment = sessionStorage.getItem('experiment'),
+        maplayers = el.querySelectorAll('.maplayers');
+
+    maplayers.forEach(button => {
+      var id = button.closest('tr').className;
+
+      if (_this.id === cable && id === experiment) {
+        button.classList.add('selected');
+      }
     });
   };
 
@@ -268,31 +295,12 @@ var CableLine = function (options) {
    * @param html {String}
    */
   _this.addContent = function (html) {
-    var maplayers, metadata,
-        cable = sessionStorage.getItem('cable'),
-        popup = _this.mapLayer.getPopup(),
-        el = popup.getElement(),
-        experiment = sessionStorage.getItem('experiment');
+    var popup = _this.mapLayer.getPopup(),
+        el = popup.getElement();
 
     popup.setContent(html).update();
-
-    // Add event listeners and highlight selected button (if applicable)
-    maplayers = el.querySelectorAll('.maplayers');
-    metadata = el.querySelectorAll('.metadata');
-
-    maplayers.forEach(button => {
-      var id = button.closest('tr').className;
-
-      if (cable === _this.id && experiment === id) {
-        button.classList.add('selected');
-      }
-
-      button.addEventListener('click', _toggleExperiment);
-    });
-
-    metadata.forEach(button =>
-      button.addEventListener('click', _showMetadata)
-    );
+    _addListeners(el);
+    _selectButton(el);
   };
 
   /**
@@ -310,7 +318,7 @@ var CableLine = function (options) {
     _onPopupClose = null;
     _onPopupOpen = null;
     _removeExperiment = null;
-    _removeListeners = null;
+    _selectButton = null;
     _showMetadata = null;
     _style = null;
     _toggleExperiment = null;
@@ -335,7 +343,11 @@ var CableLine = function (options) {
    * Remove the Feature.
    */
   _this.remove = function () {
-    _removeListeners();
+    _this.mapLayer.off({
+      popupclose: _onPopupClose,
+      popupopen: _onPopupOpen
+    });
+
     _app.MapPane.removeFeature(_this);
   };
 
@@ -359,7 +371,10 @@ var CableLine = function (options) {
         minWidth: 300
       });
 
-    _addListeners();
+    _this.mapLayer.on({
+      popupclose: _onPopupClose,
+      popupopen: _onPopupOpen
+    });
   };
 
 
