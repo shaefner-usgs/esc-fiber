@@ -108,6 +108,7 @@ var Earthquakes = function (options) {
       _onPopupOpen,
       _pointToLayer,
       _removeShakeMap,
+      _selectButton,
       _toggleShakeMap;
 
 
@@ -507,15 +508,8 @@ var Earthquakes = function (options) {
     if (button) {
       button.id = marker.feature.id; // eqid
 
-      button.classList.add('no-animation'); // conceal (de)selection of button
-
-      if (button.id === sessionStorage.getItem('shakemap')) {
-        button.classList.add('selected');
-      } else {
-        button.classList.remove('selected');
-      }
-
       button.addEventListener('click', _toggleShakeMap);
+      _selectButton(button);
     }
   };
 
@@ -553,6 +547,21 @@ var Earthquakes = function (options) {
       shakemap.remove();
       shakemap.destroy();
       features.deleteFeature(shakemap.id);
+    }
+  };
+
+  /**
+   * Select the ShakeMap Contours button (if applicable).
+   *
+   * @param button {Element}
+   */
+  _selectButton = function (button) {
+    button.classList.add('no-animation'); // conceal (de)selection of button
+
+    if (button.id === sessionStorage.getItem('shakemap')) {
+      button.classList.add('selected');
+    } else {
+      button.classList.remove('selected');
     }
   };
 
@@ -608,6 +617,7 @@ var Earthquakes = function (options) {
     _onPopupOpen = null;
     _pointToLayer = null;
     _removeShakeMap = null;
+    _selectButton = null;
     _toggleShakeMap = null;
 
     _this = null;
