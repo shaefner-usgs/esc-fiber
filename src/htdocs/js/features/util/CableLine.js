@@ -109,6 +109,7 @@ var CableLine = function (options) {
     var coords = [],
         points = L.featureGroup();
 
+    // Combine multiple LineString features into a single set of coords
     json.features.forEach(feature =>
       coords = coords.concat(feature.geometry.coordinates)
     );
@@ -185,30 +186,8 @@ var CableLine = function (options) {
    * Remove the existing experiment's Features.
    */
   _removeExperiment = function () {
-    var features = _app.Features,
-        earthquake = features.getFeature('earthquake'),
-        earthquakes = features.getFeature('earthquakes'),
-        experiment = features.getFeature('experiment'),
-        shakemap = features.getFeature('shakemap-contours');
-
-    if (features.isFeature(earthquakes)) {
-      earthquakes.remove();
-      earthquakes.destroy();
-      features.deleteFeature(earthquakes.id);
-    }
-    if (features.isFeature(experiment)) {
-      experiment.remove();
-      experiment.destroy();
-      features.deleteFeature(experiment.id);
-    }
-    if (features.isFeature(shakemap)) {
-      earthquake.destroy();
-      features.deleteFeature(earthquake.id);
-
-      shakemap.remove();
-      shakemap.destroy();
-      features.deleteFeature(shakemap.id);
-    }
+    _app.Features.removeFeatures('experiment');
+    _app.Features.removeFeatures('shakemap');
   };
 
   /**
