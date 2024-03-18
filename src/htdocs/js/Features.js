@@ -45,6 +45,7 @@ var _MODULES = {
  *       getStatus: {Function}
  *       isFeature: {Function}
  *       reloadFeature: {Function}
+ *       removeFeatures: {Function}
  *       reset: {Function}
  *       storeFeature: {Function}
  *     }
@@ -200,21 +201,22 @@ var Features = function (options) {
   };
 
   /**
-   * Remove all Features, except 'base' Features.
+   * Remove all Features matching the given mode.
+   *
+   * @param mode {String}
    */
-  _removeFeatures = function () {
+  _removeFeatures = function (mode) {
     try {
-      Object.keys(_features).forEach(mode => {
-        if (mode !== 'base') {
-          Object.keys(_features[mode]).forEach(id => {
-            var feature = _features[mode][id];
+      Object.keys(_features[mode]).forEach(id => {
+        var feature = _this.getFeature(id);
 
-            if (feature.remove) {
-              feature.remove();
-            }
+        if (_this.isFeature(feature)) {
+          if (feature.remove) {
+            feature.remove();
+          }
 
-            feature.destroy();
-          });
+          _this.deleteFeature(feature.id);
+          feature.destroy();
         }
       });
     } catch (error) {
@@ -392,11 +394,28 @@ var Features = function (options) {
   };
 
   /**
+   * Wrapper method that removes all Features or the given mode's Features.
+   *
+   * @param mode {String} optional; default is null
+   */
+  _this.removeFeatures = function (mode = null) {
+    if (mode) {
+      _removeFeatures(mode);
+    } else { // remove all Features (except base Features)
+      Object.keys(_features).forEach(mode => {
+        if (mode !== 'base') {
+          _removeFeatures(mode);
+        }
+      });
+    }
+  };
+
+  /**
    * Reset to default state.
    */
   _this.reset = function () {
     _clearQueue();
-    _removeFeatures();
+    _this.removeFeatures();
     _initFeatures();
   };
 
