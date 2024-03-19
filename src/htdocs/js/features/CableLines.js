@@ -109,11 +109,10 @@ var CableLines = function (options) {
    * @return status {String}
    */
   _this.getStatus = function () {
-    var feature,
-        status = 'ready'; // default
+    var status = 'ready'; // default
 
     _cables.forEach(cable => {
-      feature = _app.Features.getFeature(cable.id);
+      var feature = _app.Features.getFeature(cable.id);
 
       if (!_app.Features.isFeature(feature)) {
         status = 'loading';
