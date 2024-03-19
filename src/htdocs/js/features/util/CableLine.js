@@ -20,7 +20,6 @@
  *       id: {String}
  *       mapLayer: {L.FeatureGroup}
  *       name: {String}
- *       remove: {Function}
  *       render: {Function}
  *       url: {String}
  *     }
@@ -50,7 +49,7 @@ var CableLine = function (options) {
     _app = options.app;
 
     _this.id = options.id;
-    _this.mapLayer = L.featureGroup(); // polyline and points
+    _this.mapLayer = L.featureGroup(); // Polyline and Points
     _this.name = options.name;
     _this.url = `json/${options.id}.geojson`;
   };
@@ -68,9 +67,9 @@ var CableLine = function (options) {
     _app.StatusBar.reset(); // be certain Metadata's loading message is purged
 
     _app.Features.createFeatures('experiment', {
+      cable: _this.id,
       endtime: data.endtimeISO,
       experiment: id,
-      cable: _this.id,
       latitude: center.lat,
       longitude: center.lng,
       maxradiuskm: 100,
@@ -170,7 +169,7 @@ var CableLine = function (options) {
     var el = e.popup.getElement(),
         metadata = _app.Features.getFeature('metadata');
 
-    // Get the Popup's content (added via _this.addContent()) and/or add listeners
+    // Fetch the Popup's content, which is added via _this.addContent()
     if (_this.id !== metadata.cable) {
       _app.Features.createFeatures('cable', {
         cable: _this.id,
@@ -316,18 +315,6 @@ var CableLine = function (options) {
     });
 
     _this.mapLayer.addLayer(line);
-  };
-
-  /**
-   * Remove the Feature.
-   */
-  _this.remove = function () {
-    _this.mapLayer.off({
-      popupclose: _onPopupClose,
-      popupopen: _onPopupOpen
-    });
-
-    _app.MapPane.removeFeature(_this);
   };
 
   /**
