@@ -66,13 +66,13 @@ var Earthquake = function (options) {
   };
 
   /**
-   * Add the JSON feed data and set the URL (nothing to render).
+   * Add the JSON feed data (nothing to render).
    *
    * @param json {Object} default is {}
    */
   _this.render = function (json = {}) {
-    var shakemap = _app.Features.getFeature('shakemap-contours'),
-        product = json.properties.products.shakemap[0] || {};
+    var product = json.properties.products.shakemap[0] || {},
+        shakemap = _app.Features.getFeature('shakemap-contours');
 
     shakemap.eqid = json.id;
     shakemap.url = product.contents?.['download/cont_mmi.json']?.url || '';
