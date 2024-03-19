@@ -220,7 +220,7 @@ var CableLine = function (options) {
         number = id.match(/\d+$/)[0],
         title = `${_this.name} Experiment ${number}`;
 
-    metadata.lightbox.setTitle(title).setContent(content).show();
+    metadata.lightbox.setTitle(title).setContent(content).show(true);
   };
 
   /**
