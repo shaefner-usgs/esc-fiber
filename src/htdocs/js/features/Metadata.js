@@ -49,10 +49,10 @@ var Metadata = function (options) {
     _this.cable = options.cable;
     _this.data = {};
     _this.id = 'metadata';
-    _this.name = options.name + ' Experiments';
     _this.lightbox = Lightbox({
       id: _this.id
     });
+    _this.name = options.name + ' Experiments';
     _this.url = `json/${options.cable}.json`;
   };
 
@@ -132,10 +132,10 @@ var Metadata = function (options) {
         );
       });
 
-      html +=
-        '</table>' +
-      '</div>';
+      html += '</table>';
     }
+
+    html += '</div>';
 
     return html;
   };
@@ -169,9 +169,10 @@ var Metadata = function (options) {
   };
 
   /**
-   * Get the Lightbox content.
+   * Get the Lightbox's HTML content.
    *
    * @param id {String}
+   *     Experiment id
    *
    * @return {String}
    */
