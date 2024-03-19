@@ -74,8 +74,8 @@ _MARKERS = {
  *       cable: {String}
  *       count: {Number}
  *       description: {String}
- *       experiment: {String}
  *       destroy: {Function}
+ *       experiment: {String}
  *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.GeoJSON}
@@ -238,7 +238,7 @@ var Earthquakes = function (options) {
    * @return age {String}
    */
   _getAge = function (datetime) {
-    var age = 'older',
+    var age = 'older', // default
         pastday = _NOW.minus({ days: 1 }),
         pasthour = _NOW.minus({ hours: 1 }),
         pastweek = _NOW.minus({ weeks: 1 });
@@ -337,7 +337,7 @@ var Earthquakes = function (options) {
   };
 
   /**
-   * Get the fill color for the given earthquake, symobolized by age or depth.
+   * Get the fill color for the given earthquake, symbolized by age or depth.
    *
    * @param eq {Object}
    *
@@ -355,6 +355,8 @@ var Earthquakes = function (options) {
    * Get the depth 'level' of an earthquake.
    *
    * @param depth {Number}
+   *
+   * @return {String}
    */
   _getLevel = function (depth) {
     switch (true) {
@@ -555,7 +557,6 @@ var Earthquakes = function (options) {
     var button = e.target;
 
     button.classList.remove('no-animation');
-
     _app.Features.removeFeatures('shakemap');
 
     if (button.classList.contains('selected')) { // turn off
@@ -629,9 +630,11 @@ var Earthquakes = function (options) {
 
   /**
    * Render the Feature.
+   *
+   * @param json {Object} default is {}
    */
-  _this.render = function (json) {
-    _this.count = json.features.length;
+  _this.render = function (json = {}) {
+    _this.count = json.features?.length;
 
     _app.MapPane.addFeature(_this);
 
