@@ -73,7 +73,7 @@ var Features = function (options) {
 
   _initialize = function (options = {}) {
     _app = options.app;
-    _modules = {};
+    _modules = {}; // store the Features' modules by their id value
     _opts = {};
     _queue = [];
 
@@ -113,7 +113,7 @@ var Features = function (options) {
   };
 
   /**
-   * Get the display mode for the given Feature.
+   * Get the display mode for the Feature matching the given id.
    *
    * @param id {String}
    *     Feature id
@@ -126,7 +126,7 @@ var Features = function (options) {
     Object.keys(_features).forEach(mode => {
       if (mode !== 'loading') { // skip Features that aren't ready
         Object.keys(_features[mode]).forEach(featureId => {
-          if (id === featureId) {
+          if (featureId === id) {
             match = mode;
           }
         });
@@ -137,7 +137,7 @@ var Features = function (options) {
   };
 
   /**
-   * Get the reload options for the given Feature.
+   * Get the reload options for the Feature matching the given id.
    *
    * @param id {String}
    *     Feature id
@@ -160,7 +160,7 @@ var Features = function (options) {
   };
 
   /**
-   * Fetch and/or render the given Feature.
+   * Fetch and/or render the given Feature when 'ready'.
    *
    * @param feature {Object}
    */
@@ -169,10 +169,10 @@ var Features = function (options) {
 
     if (status === 'ready') {
       if (feature.fetch && !feature.deferFetch) {
-        feature.fetch(); // Feature rendered when fetched data is returned
+        feature.fetch(); // Feature rendered when its fetched data is returned
       }
       if (feature.render && !feature.url) {
-        feature.render();
+        feature.render(); // render Feature immediately
       }
     } else { // dependencies not ready
       _queue.push(setTimeout(() => {
@@ -185,19 +185,19 @@ var Features = function (options) {
    * Initialize _features, which stores Features grouped by their display mode.
    */
   _initFeatures = function () {
-    var base;
-
-    if (typeof _features === 'object') {
-      base = _features.base;
-    }
+    var base = _features?.base || {};
 
     _features = {
-      base: base || {}, // leave existing 'base' Features intact
-      cable: {},
-      experiment: {},
-      loading: {}, // temporary storage for Features that aren't ready
-      shakemap: {}
+      loading: {} // temporary storage for Features that aren't ready
     };
+
+    Object.keys(_MODULES).forEach(mode => {
+      if (mode === 'base') {
+        _features[mode] = base; // leave existing 'base' Features intact
+      } else {
+        _features[mode] = {};
+      }
+    });
   };
 
   /**
@@ -235,13 +235,13 @@ var Features = function (options) {
    *     Feature's module
    *
    *     {
-   *       Required props:
+   *       [Required props]:
    *
    *         destroy: {Function} free references
    *         id: {String} unique id
    *         name: {String} display name
    *
-   *       Auto-set props:
+   *       [Auto-set props]:
    *
    *         mode: {String <base|cable|experiment|shakemap>} display mode
    *         status: {String <error|initialized|loading|ready>} loading status
@@ -288,10 +288,6 @@ var Features = function (options) {
    * @param opts {Object} default is {}
    */
   _this.createFeatures = function (mode, opts = {}) {
-    if (mode === 'experiment') {
-      _features.experiment = {}; // reset previous experiment's Features
-    }
-
     _opts[mode] = opts; // cache to enable reloading after a failed request
 
     _MODULES[mode].forEach(module => {
@@ -300,7 +296,7 @@ var Features = function (options) {
   };
 
   /**
-   * Delete the given stored Feature.
+   * Delete the stored Feature matching the given id.
    *
    * @param id {String}
    *     Feature id
