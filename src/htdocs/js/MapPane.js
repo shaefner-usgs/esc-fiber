@@ -41,7 +41,6 @@ var MapPane = function (options) {
       _app,
       _bounds,
       _cable,
-      _el,
       _layers,
       _map,
 
@@ -58,10 +57,9 @@ var MapPane = function (options) {
   _initialize = function (options = {}) {
     _app = options.app;
     _bounds = L.latLngBounds();
-    _el = options.el;
     _layers = _getLayers();
 
-    _initMap();
+    _initMap(options.el);
   };
 
   /**
@@ -128,8 +126,10 @@ var MapPane = function (options) {
 
   /**
    * Create the Leaflet map instance.
+   *
+   * @param el {Element}
    */
-  _initMap = function () {
+  _initMap = function (el) {
     var zoomControl;
 
     _map = L.map('map', {
@@ -141,7 +141,7 @@ var MapPane = function (options) {
 
     // Hide the zoom control on mobile (in favor of pinch-to-zoom)
     if (L.Browser.mobile) {
-      zoomControl = _el.querySelector('.leaflet-control-zoom');
+      zoomControl = el.querySelector('.leaflet-control-zoom');
 
       zoomControl.style.display = 'none';
     }
@@ -155,10 +155,10 @@ var MapPane = function (options) {
   _setBounds = function (feature) {
     var bounds = feature.mapLayer.getBounds();
 
-    if (feature.mode === 'experiment' && feature.cable !== _cable) {
+    if (feature.mode === 'experiment' && feature.cable !== _cable) { // reset
       _bounds = bounds;
       _cable = feature.cable;
-    } else {
+    } else { // extend
       _bounds.extend(bounds);
     }
   };
@@ -166,14 +166,12 @@ var MapPane = function (options) {
   /**
    * Affix map Popup to CableLine (can become "detached" when the map extent is
    * updated to fit the bounds of an experiment's Features).
-   *
-   * @param status {String}
    */
-  _setPopup = function (status) {
+  _setPopup = function () {
     var cables = _app.Features.getFeature('cables');
 
     cables.mapLayer.eachLayer(layer => {
-      if (layer.isPopupOpen() && status === 'ready') {
+      if (layer.isPopupOpen()) {
         layer.closePopup().openPopup();
       }
     });
@@ -184,27 +182,28 @@ var MapPane = function (options) {
   // ----------------------------------------------------------
 
   /**
-   * Add the given Feature to the map.
+   * Add the given Feature to the map and layer control.
    *
    * @param feature {Object}
    */
   _this.addFeature = function (feature) {
     var status = _app.Features.getStatus(feature.mode);
 
-    if (feature.mode === 'experiment') {
-      _setPopup(status);
-    }
-
     _setBounds(feature);
 
-    if (status === 'ready' && _bounds.isValid()) {
+    if (status === 'ready') {
       _this.fitBounds();
-      _cable = null; // reset cached value
+
+      if (feature.mode === 'experiment') {
+        _cable = null; // reset cached value
+
+        _setPopup();
+      }
     }
 
     _createPane(feature.id);
-    _this.layerControl.addOverlay(feature);
     _map.addLayer(feature.mapLayer);
+    _this.layerControl.addOverlay(feature);
   };
 
   /**
@@ -214,12 +213,14 @@ var MapPane = function (options) {
    * @param initial {Boolean} optional; default is false
    */
   _this.fitBounds = function (bounds = _bounds, initial = false) {
-    _map.fitBounds(bounds, {
-      paddingTopLeft: [0, 65]
-    });
+    if (bounds.isValid()) {
+      _map.fitBounds(bounds, {
+        paddingTopLeft: [0, 65]
+      });
 
-    if (initial) {
-      _this.initialBounds = bounds; // cache value
+      if (initial) {
+        _this.initialBounds = bounds; // cache value
+      }
     }
   };
 
@@ -230,8 +231,8 @@ var MapPane = function (options) {
    */
   _this.removeFeature = function (feature) {
     if (feature.mapLayer) {
-      _this.layerControl.removeLayer(feature.mapLayer);
       _map.removeLayer(feature.mapLayer);
+      _this.layerControl.removeLayer(feature.mapLayer);
     }
   };
 
