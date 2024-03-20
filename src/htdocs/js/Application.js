@@ -25,7 +25,6 @@ var Application = function (options) {
   var _this,
       _initialize,
 
-      _els,
       _initialReset,
 
       _initClasses;
@@ -34,22 +33,23 @@ var Application = function (options) {
   _this = {};
 
   _initialize = function (options = {}) {
-    _els = options;
     _initialReset = true;
 
     _this.dateFormat = 'LLL d, yyyy';
     _this.timeFormat = 'LLL d, yyyy TT';
 
     _this.reset();
-    _initClasses();
+    _initClasses(options);
     _this.Features.createFeatures('base');
   };
 
   /**
    * Instantiate the app's 'primary' Classes and store/share their public
    * methods/props via the 'app' property.
+   *
+   * @param els {Object}
    */
-  _initClasses = function () {
+  _initClasses = function (els) {
     var appClasses = {
       Features: Features,
       MapPane: MapPane,
@@ -61,7 +61,7 @@ var Application = function (options) {
 
       _this[name] = appClasses[name]({
         app: _this,
-        el: _els[key] || null
+        el: els[key] || null
       });
     });
   };
