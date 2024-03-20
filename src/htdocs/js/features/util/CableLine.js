@@ -77,6 +77,9 @@ var CableLine = function (options) {
       name: _this.name,
       starttime: data.starttimeISO
     });
+
+    sessionStorage.setItem('cable', _this.id);
+    sessionStorage.setItem('experiment', id);
   };
 
   /**
@@ -182,11 +185,15 @@ var CableLine = function (options) {
   };
 
   /**
-   * Remove the existing experiment's Features.
+   * Remove an existing experiment's Features.
    */
   _removeExperiment = function () {
     _app.Features.removeFeatures('experiment');
     _app.Features.removeFeatures('shakemap');
+
+    sessionStorage.removeItem('cable');
+    sessionStorage.removeItem('experiment');
+    sessionStorage.removeItem('shakemap');
   };
 
   /**
@@ -251,13 +258,9 @@ var CableLine = function (options) {
 
     if (button.classList.contains('selected')) { // turn off
       button.classList.remove('selected');
-      sessionStorage.removeItem('cable');
-      sessionStorage.removeItem('experiment');
     } else {
       buttons.forEach(b => b.classList.remove('selected'));
       button.classList.add('selected');
-      sessionStorage.setItem('cable', _this.id);
-      sessionStorage.setItem('experiment', id);
 
       _addExperiment(id);
     }
