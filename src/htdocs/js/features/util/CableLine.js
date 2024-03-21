@@ -21,6 +21,7 @@
  *       mapLayer: {L.FeatureGroup}
  *       name: {String}
  *       render: {Function}
+ *       setPopup: {Function}
  *       url: {String}
  *     }
  */
@@ -344,6 +345,16 @@ var CableLine = function (options) {
       popupclose: _onPopupClose,
       popupopen: _onPopupOpen
     });
+  };
+
+  /**
+   * Affix Popup to CableLine (becomes "detached" when the map is zoomed to fit
+   * the bounds of an experiment's Features).
+   */
+  _this.setPopup = function () {
+    if (_this.mapLayer.isPopupOpen()) {
+      _this.mapLayer.closePopup().openPopup();
+    }
   };
 
 

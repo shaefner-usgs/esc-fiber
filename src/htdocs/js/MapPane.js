@@ -48,8 +48,7 @@ var MapPane = function (options) {
       _createPane,
       _getLayers,
       _initMap,
-      _setBounds,
-      _setPopup;
+      _setBounds;
 
 
   _this = {};
@@ -163,20 +162,6 @@ var MapPane = function (options) {
     }
   };
 
-  /**
-   * Affix map Popup to CableLine (can become "detached" when the map extent is
-   * updated to fit the bounds of an experiment's Features).
-   */
-  _setPopup = function () {
-    var cables = _app.Features.getFeature('cables');
-
-    cables.mapLayer.eachLayer(layer => {
-      if (layer.isPopupOpen()) {
-        layer.closePopup().openPopup();
-      }
-    });
-  };
-
   // ----------------------------------------------------------
   // Public methods
   // ----------------------------------------------------------
@@ -195,9 +180,9 @@ var MapPane = function (options) {
       _this.fitBounds();
 
       if (feature.mode === 'experiment') {
-        _cable = null; // reset cached value
+        _app.Features.getFeature(_cable).setPopup();
 
-        _setPopup();
+        _cable = null; // reset cached value
       }
     }
 
