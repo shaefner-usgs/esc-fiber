@@ -30,6 +30,8 @@ var CableLine = function (options) {
       _initialize,
 
       _app,
+      _details,
+      _maplayers,
 
       _addExperiment,
       _addListeners,
@@ -89,14 +91,14 @@ var CableLine = function (options) {
    * @param el {Element}
    */
   _addListeners = function (el) {
-    var details = el.querySelectorAll('.details'),
-        maplayers = el.querySelectorAll('.maplayers');
+    _details = el.querySelectorAll('.details'),
+    _maplayers = el.querySelectorAll('.maplayers');
 
-    details.forEach(button =>
+    _details.forEach(button =>
       button.addEventListener('click', _showDetails)
     );
 
-    maplayers.forEach(button => {
+    _maplayers.forEach(button => {
       button.addEventListener('click', _toggleExperiment);
     });
   };
@@ -147,19 +149,13 @@ var CableLine = function (options) {
 
   /**
    * Event handler for closing a Popup.
-   *
-   * @param e {Event}
    */
-  _onPopupClose = function (e) {
-    var el = e.popup.getElement(),
-        details = el.querySelectorAll('.details'),
-        maplayers = el.querySelectorAll('.maplayers');
-
-    details.forEach(button =>
+  _onPopupClose = function () {
+    _details?.forEach(button =>
       button.removeEventListener('click', _showDetails)
     );
 
-    maplayers.forEach(button =>
+    _maplayers?.forEach(button =>
       button.removeEventListener('click', _toggleExperiment)
     );
   };
@@ -292,6 +288,8 @@ var CableLine = function (options) {
     _initialize = null;
 
     _app = null;
+    _details = null;
+    _maplayers = null;
 
     _addExperiment = null;
     _addListeners = null;
