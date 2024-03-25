@@ -29,6 +29,8 @@ var StatusBar = function (options) {
       _getMessage,
       _hide,
       _reloadFeature,
+      _removeItem,
+      _removeListeners,
       _removeNode,
       _show;
 
@@ -43,23 +45,15 @@ var StatusBar = function (options) {
   /**
    * Add event listeners.
    *
-   * @param div {Element}
+   * @param el {Element}
    * @param error {Object}
    */
-  _addListeners = function (div, error) {
-    var close = div.querySelector('.close'),
-        reload = div.querySelector('.reload');
+  _addListeners = function (el, error) {
+    var close = el.querySelector('.close'),
+        reload = el.querySelector('.reload');
 
-    if (close) {
-      close.addEventListener('click', e => {
-        e.preventDefault();
-        _this.removeItem(error.id, false);
-      });
-    }
-
-    if (reload) {
-      reload.addEventListener('click', e => _reloadFeature(e, error));
-    }
+    close?.addEventListener('click', e => _removeItem(e, error));
+    reload?.addEventListener('click', e => _reloadFeature(e, error));
   };
 
   /**
@@ -112,12 +106,38 @@ var StatusBar = function (options) {
   };
 
   /**
+   * Event handler that removes an item from the StatusBar.
+   *
+   * @param e {Event}
+   * @param error {Object}
+   */
+  _removeItem = function (e, error) {
+    e.preventDefault();
+    _this.removeItem(error.id, false);
+  };
+
+  /**
+   * Remove event listeners.
+   *
+   * @param el {Element}
+   */
+  _removeListeners = function (el) {
+    var close = el.querySelector('.close'),
+        reload = el.querySelector('.reload');
+
+    close?.removeEventListener('click', _removeItem);
+    reload?.removeEventListener('click', _reloadFeature);
+  };
+
+  /**
    * Remove the given node from the DOM.
    *
    * @param el {Element}
    */
   _removeNode = function (el) {
     var parent = el.parentNode;
+
+    _removeListeners(el);
 
     if (parent) {
       parent.removeChild(el);
