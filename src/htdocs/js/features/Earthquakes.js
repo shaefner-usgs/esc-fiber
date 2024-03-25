@@ -90,6 +90,7 @@ var Earthquakes = function (options) {
       _initialize,
 
       _app,
+      _button,
       _colorBy,
 
       _addBubbles,
@@ -487,15 +488,9 @@ var Earthquakes = function (options) {
 
   /**
    * Event handler for closing a Popup.
-   *
-   * @param e {Event}
    */
-  _onPopupClose = function (e) {
-    var button = e.popup.getElement().querySelector('.shakemap');
-
-    if (button) {
-      button.removeEventListener('click', _toggleShakeMap);
-    }
+  _onPopupClose = function () {
+    _button?.removeEventListener('click', _toggleShakeMap);
   };
 
   /**
@@ -504,17 +499,18 @@ var Earthquakes = function (options) {
    * @param e {Event}
    */
   _onPopupOpen = function (e) {
-    var button = e.popup.getElement().querySelector('.shakemap'),
-        marker = e.layer;
+    var marker = e.layer;
+
+    _button = e.popup.getElement().querySelector('.shakemap');
+
+    if (_button) {
+      _button.id = marker.feature.id; // eqid
+
+      _button.addEventListener('click', _toggleShakeMap);
+      _selectButton();
+    }
 
     marker.openPopup(marker.getLatLng()); // position at Marker center
-
-    if (button) {
-      button.id = marker.feature.id; // eqid
-
-      button.addEventListener('click', _toggleShakeMap);
-      _selectButton(button);
-    }
   };
 
   /**
@@ -547,16 +543,14 @@ var Earthquakes = function (options) {
 
   /**
    * Select the ShakeMap Contours button (if applicable).
-   *
-   * @param button {Element}
    */
-  _selectButton = function (button) {
-    button.classList.add('no-animation'); // conceal (de)selection of button
+  _selectButton = function () {
+    _button.classList.add('no-animation'); // conceal (de)selection of button
 
-    if (button.id === sessionStorage.getItem('shakemap')) {
-      button.classList.add('selected');
+    if (_button.id === sessionStorage.getItem('shakemap')) {
+      _button.classList.add('selected');
     } else {
-      button.classList.remove('selected');
+      _button.classList.remove('selected');
     }
   };
 
@@ -592,6 +586,7 @@ var Earthquakes = function (options) {
     _initialize = null;
 
     _app = null;
+    _button = null;
     _colorBy = null;
 
     _addBubbles = null;
