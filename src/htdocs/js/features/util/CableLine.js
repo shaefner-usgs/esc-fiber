@@ -71,13 +71,13 @@ var CableLine = function (options) {
 
     _app.Features.createFeatures('experiment', {
       cable: _this.id,
+      cableName: _this.name,
       endtime: data.endtimeISO,
       experiment: id,
       latitude: center.lat,
       longitude: center.lng,
       maxradiuskm: 100,
       minmagnitude: 0,
-      name: _this.name,
       starttime: data.starttimeISO
     });
 
@@ -173,7 +173,7 @@ var CableLine = function (options) {
     if (_this.id !== metadata.cable) {
       _app.Features.createFeatures('cable', {
         cable: _this.id,
-        name: _this.name
+        cableName: _this.name
       });
     } else {
       _addListeners(el);

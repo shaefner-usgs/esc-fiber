@@ -9,8 +9,8 @@
  *     {
  *       app: {Object} Application
  *       cable: {String} cable id
+ *       cableName: {String} cable name
  *       experiment: {String} experiment id
- *       name: {String} cable name
  *     }
  *
  * @return _this {Object}
@@ -47,7 +47,7 @@ var Experiment = function (options) {
     _this.cable = options.cable;
     _this.experiment = options.experiment;
     _this.id = 'experiment';
-    _this.name = `${options.name} Experiment ${number}`;
+    _this.name = `${options.cableName} Experiment ${number}`;
     _this.url = `json/${options.cable}-${options.experiment}.geojson`;
   };
 

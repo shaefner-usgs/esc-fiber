@@ -14,7 +14,7 @@ var AppUtil = require('util/AppUtil'),
  *     {
  *       app: {Object} Application
  *       cable: {String} cable id
- *       name: {String} cable name
+ *       cableName: {String} cable name
  *     }
  *
  * @return _this {Object}
@@ -52,7 +52,7 @@ var Metadata = function (options) {
     _this.lightbox = Lightbox({
       id: _this.id
     });
-    _this.name = options.name + ' Experiments';
+    _this.name = options.cableName + ' Experiments';
     _this.url = `json/${options.cable}.json`;
   };
 
