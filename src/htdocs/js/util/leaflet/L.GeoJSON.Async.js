@@ -26,7 +26,7 @@ var _DEFAULTS = {
  * @param options {Object}
  *     L.GeoJSON options (optional), plus:
  *
- *     { // enables additional functionality if components (like StatusBar) exist
+ *     { // enables additional functionality if components (StatusBar, etc) exist
  *       app: {Object} optional
  *       feature: {Object} optional
  *     }
@@ -53,11 +53,10 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
 
   /**
    * Add the count value next to the given Feature's name (if applicable).
-   *
-   * @param feature {Object}
    */
-  _addCount: function (feature) {
-    var count, value;
+  addCount: function () {
+    var count, value,
+        feature = this._feature;
 
     if (Object.hasOwn(feature, 'count')) {
       value = AppUtil.addCommas(feature.count);
@@ -87,7 +86,7 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
       feature.render(json);
     }
 
-    this._addCount(feature);
+    this.addCount();
   },
 
   /**
