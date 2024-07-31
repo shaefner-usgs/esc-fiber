@@ -3,7 +3,7 @@
 
 
 /**
- * Utility Class that creates a single CableLine Feature.
+ * Utility Class that creates a single Cable Feature.
  *
  * @param options {Object}
  *     {
@@ -25,7 +25,7 @@
  *       url: {String}
  *     }
  */
-var CableLine = function (options) {
+var Cable = function (options) {
   var _this,
       _initialize,
 
@@ -141,7 +141,7 @@ var CableLine = function (options) {
    */
   _getPopup = function () {
     return '' +
-      '<div class="cablelines">' +
+      '<div class="cable">' +
         `<h4>${_this.name} Experiments</h4>` +
         '<div class="spinner"></div>' +
       '<div>';
@@ -346,8 +346,8 @@ var CableLine = function (options) {
   };
 
   /**
-   * Affix Popup to CableLine (becomes "detached" when the map is zoomed to fit
-   * the bounds of an experiment's Features).
+   * Affix Popup to Cable (becomes "detached" when the map is zoomed to fit the
+   * bounds of an experiment's Features).
    */
   _this.setPopup = function () {
     if (_this.mapLayer.isPopupOpen()) {
@@ -362,4 +362,4 @@ var CableLine = function (options) {
 };
 
 
-module.exports = CableLine;
+module.exports = Cable;

@@ -2,11 +2,11 @@
 'use strict';
 
 
-var CableLine = require('features/util/CableLine');
+var Cable = require('features/util/Cable');
 
 
 /**
- * Create the CableLines Feature, a collection of individual CableLine Features.
+ * Create the Cables Feature, a collection of individual Cable Features.
  *
  * @param options {Object}
  *     {
@@ -24,7 +24,7 @@ var CableLine = require('features/util/CableLine');
  *       render: {Function}
  *     }
  */
-var CableLines = function (options) {
+var Cables = function (options) {
   var _this,
       _initialize,
 
@@ -49,11 +49,11 @@ var CableLines = function (options) {
   };
 
   /**
-   * Create and add the individual CableLine Features.
+   * Create and add the individual Cable Features.
    */
   _addCables = function () {
     _cables.forEach(cable => {
-      var feature = _app.Features.createFeature(CableLine, 'base', {
+      var feature = _app.Features.createFeature(Cable, 'base', {
         id: cable.id,
         name: cable.name
       });
@@ -143,4 +143,4 @@ var CableLines = function (options) {
 };
 
 
-module.exports = CableLines;
+module.exports = Cables;

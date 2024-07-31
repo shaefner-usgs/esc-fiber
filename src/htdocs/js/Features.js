@@ -1,7 +1,7 @@
 'use strict';
 
 
-var CableLines = require('features/CableLines'),
+var Cables = require('features/Cables'),
     Earthquake = require('features/Earthquake'),
     Earthquakes = require('features/Earthquakes'),
     Experiment = require('features/Experiment'),
@@ -11,7 +11,7 @@ var CableLines = require('features/CableLines'),
 
 var _MODULES = {
   base: [ // Features added when app is loaded
-    CableLines
+    Cables
   ],
   cable: [ // Features added when a cable is selected
     Metadata

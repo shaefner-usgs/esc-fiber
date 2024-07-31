@@ -109,7 +109,7 @@ var Metadata = function (options) {
    */
   _getPopup = function () {
     var html =
-      '<div class="cablelines">' +
+      '<div class="cable">' +
         `<h4>${_this.name}</h4>`;
 
     if (AppUtil.isEmpty(_this.data)) {
