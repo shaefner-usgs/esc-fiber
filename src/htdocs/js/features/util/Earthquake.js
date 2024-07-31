@@ -3,8 +3,8 @@
 
 
 /**
- * Create an Earthquake Feature from the GeoJSON 'detail' feed, which includes
- * additional properties not included in Earthquakes.
+ * Utility Class that creates an Earthquake Feature, which provides the URL
+ * for the ShakeMapContours Feature.
  *
  * @param options {Object}
  *     {
@@ -37,7 +37,7 @@ var Earthquake = function (options) {
     _this.id = 'earthquake';
     _this.name = 'Earthquake';
     _this.url = 'https://earthquake.usgs.gov/fdsnws/event/1/query?eventid=' +
-      options.eqid + '&format=geojson';
+      options.eqid + '&format=geojson'; // GeoJSON 'detail' feed
   };
 
   // ----------------------------------------------------------

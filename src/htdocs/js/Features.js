@@ -2,7 +2,7 @@
 
 
 var Cables = require('features/Cables'),
-    Earthquake = require('features/Earthquake'),
+    Earthquake = require('features/util/Earthquake'),
     Earthquakes = require('features/Earthquakes'),
     Experiment = require('features/Experiment'),
     Metadata = require('features/Metadata'),
