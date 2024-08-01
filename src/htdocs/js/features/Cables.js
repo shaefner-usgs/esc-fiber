@@ -16,12 +16,13 @@ var Cable = require('features/util/Cable');
  * @return _this {Object}
  *     {
  *       destroy: {Function}
- *       getStatus: {Function}
+ *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.FeatureGroup}
  *       name: {String}
  *       remove: {Function}
  *       render: {Function}
+ *       url: {String}
  *     }
  */
 var Cables = function (options) {
@@ -29,59 +30,35 @@ var Cables = function (options) {
       _initialize,
 
       _app,
-      _cables,
 
-      _addCables,
-      _getCables;
+      _onEachFeature;
 
 
   _this = {};
 
   _initialize = function (options = {}) {
     _app = options.app;
-    _cables = _getCables();
 
     _this.id = 'cables';
     _this.mapLayer = L.featureGroup();
     _this.name = 'Cables';
-
-    _addCables();
+    _this.url = 'json/cables.json.php';
   };
 
   /**
    * Create and add the individual Cable Features.
-   */
-  _addCables = function () {
-    _cables.forEach(cable => {
-      var feature = _app.Features.createFeature(Cable, 'base', {
-        id: cable.id,
-        name: cable.name
-      });
-
-      _this.mapLayer.addLayer(feature.mapLayer);
-    });
-  };
-
-  /**
-   * Get the individual cable line Features' properties.
    *
-   * @return {Array}
+   * @param feature {Object}
+   * @param layer {L.Layer}
    */
-  _getCables = function () {
-    return [
-      {
-        id: 'arcata',
-        name: 'Arcata, CA'
-      },
-      {
-        id: 'cordova',
-        name: 'Cordova, AK'
-      },
-      {
-        id: 'calipatria',
-        name: 'Calipatria, CA'
-      }
-    ];
+  _onEachFeature = function (feature, layer) {
+    var cable = _app.Features.createFeature(Cable, 'base', {
+      feature: feature,
+      layer: layer
+    });
+
+    _this.mapLayer.addLayer(cable.mapLayer);
+    _app.MapPane.fitBounds(_this.mapLayer.getBounds(), true);
   };
 
   // ----------------------------------------------------------
@@ -95,31 +72,27 @@ var Cables = function (options) {
     _initialize = null;
 
     _app = null;
-    _cables = null;
 
-    _addCables = null;
-    _getCables = null;
+    _onEachFeature = null;
 
     _this = null;
   };
 
   /**
-   * Get the collective loading status of the individual cable lines.
-   *
-   * @return status {String}
+   * Fetch the feed data.
    */
-  _this.getStatus = function () {
-    var status = 'ready'; // default
-
-    _cables.forEach(cable => {
-      var feature = _app.Features.getFeature(cable.id);
-
-      if (!_app.Features.isFeature(feature)) {
-        status = 'loading';
+  _this.fetch = function () {
+    L.geoJSON.async(_this.url, {
+      app: _app,
+      feature: _this,
+      onEachFeature: _onEachFeature,
+      pane: 'cables', // controls stacking order
+      style: {
+        color: '#208eff',
+        opacity: 0.6,
+        weight: 5
       }
     });
-
-    return status;
   };
 
   /**

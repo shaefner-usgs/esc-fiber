@@ -12,13 +12,28 @@ $PROMPTS = [
   // ]
   'MOUNT_PATH' => [
     'prompt' => 'URL Path for application',
-    'default' => '/powell',
+    'default' => '/esc/fiber',
     'secure' => false
   ],
   'APP_DIR' => [
     'prompt' => 'Absolute path to application root directory',
     'default' => $APP_DIR,
     'secure' => false
+  ],
+  'DB_DSN' => [
+    'prompt' => 'Database connection DSN string',
+    'default' => 'mysql:host=127.0.0.1;port=3306;dbname=web;charset=utf8',
+    'secure' => false
+  ],
+  'DB_USER' => [
+    'prompt' => 'Username for read-only database connections',
+    'default' => 'web',
+    'secure' => false
+  ],
+  'DB_PASS' => [
+    'prompt' => 'Password for database user',
+    'default' => '',
+    'secure' => true
   ]
 ];
 

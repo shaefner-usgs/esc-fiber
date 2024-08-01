@@ -9,7 +9,7 @@
  *     {
  *       app: {Object} Application
  *       cable: {String} cable id
- *       cableName: {String} cable name
+ *       name: {String} cable name
  *       experiment: {String} experiment id
  *     }
  *
@@ -39,7 +39,7 @@ var Experiment = function (options) {
 
   _this = {};
 
-  _initialize = function (options) {
+  _initialize = function (options = {}) {
     var number = options.experiment.match(/\d+$/)[0];
 
     _app = options.app;
@@ -47,8 +47,9 @@ var Experiment = function (options) {
     _this.cable = options.cable;
     _this.experiment = options.experiment;
     _this.id = 'experiment';
-    _this.name = `${options.cableName} Experiment ${number}`;
-    _this.url = `json/${options.cable}-${options.experiment}.geojson`;
+    _this.name = `${options.name} Experiment ${number}`;
+    _this.url = `json/experiment.json.php?cable=${_this.cable}` +
+      `&experiment=${number}`;
   };
 
   /**
@@ -58,7 +59,7 @@ var Experiment = function (options) {
    * @param layer {L.Layer}
    */
   _onEachFeature = function (feature, layer) {
-    layer.bindTooltip('Channel ' + feature.properties.Channel_id);
+    layer.bindTooltip('Channel ' + feature.id);
   };
 
   /**
