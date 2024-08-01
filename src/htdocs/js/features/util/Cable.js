@@ -8,21 +8,18 @@
  * @param options {Object}
  *     {
  *       app: {Object} Application
- *       id: {String} cable id
- *       name: {String} cable name
+ *       feature: {Object} GeoJSON feature
+ *       layer: {L.Layer}
  *     }
  *
  * @return _this {Object}
  *     {
  *       addContent: {Function}
  *       destroy: {Function}
- *       fetch: {Function}
  *       id: {String}
  *       mapLayer: {L.FeatureGroup}
  *       name: {String}
- *       render: {Function}
  *       setPopup: {Function}
- *       url: {String}
  *     }
  */
 var Cable = function (options) {
@@ -35,26 +32,29 @@ var Cable = function (options) {
 
       _addExperiment,
       _addListeners,
+      _getContent,
       _getPoints,
-      _getPopup,
       _onPopupClose,
       _onPopupOpen,
       _removeExperiment,
+      _render,
       _selectButton,
       _showDetails,
-      _style,
       _toggleExperiment;
 
 
   _this = {};
 
   _initialize = function (options = {}) {
+    var feature = options.feature;
+
     _app = options.app;
 
-    _this.id = options.id;
-    _this.mapLayer = L.featureGroup(); // Polyline and Points
-    _this.name = options.name;
-    _this.url = `json/${options.id}.geojson`;
+    _this.id = feature.id;
+    _this.mapLayer = L.featureGroup(); // Polyline + Points
+    _this.name = feature.properties.name;
+
+    _render(feature, options.layer);
   };
 
   /**
@@ -67,17 +67,15 @@ var Cable = function (options) {
     var center = _this.mapLayer.getBounds().getCenter(),
         data = _app.Features.getFeature('metadata').data[id];
 
-    _app.StatusBar.reset(); // be certain Metadata's loading message is purged
-
     _app.Features.createFeatures('experiment', {
       cable: _this.id,
-      cableName: _this.name,
       endtime: data.endtimeISO,
       experiment: id,
       latitude: center.lat,
       longitude: center.lng,
       maxradiuskm: 100,
       minmagnitude: 0,
+      name: _this.name,
       starttime: data.starttimeISO
     });
 
@@ -104,23 +102,33 @@ var Cable = function (options) {
   };
 
   /**
+   * Get the Popup's HTML content (a placeholder until its Metadata content is
+   * loaded).
+   *
+   * @return {String}
+   */
+  _getContent = function () {
+    return '' +
+      '<div class="cable">' +
+        `<h4>${_this.name} Experiments</h4>` +
+        '<div class="spinner"></div>' +
+      '<div>';
+  };
+
+  /**
    * Get the Polyline's vertices as a map layer.
    *
-   * @param json {Object}
+   * @param feature {Object}
    *
    * @return points {L.FeatureGroup}
    */
-  _getPoints = function (json) {
-    var coords = [],
+  _getPoints = function (feature) {
+    var coords = feature.geometry.coordinates,
         points = L.featureGroup();
-
-    // Combine multiple LineString features into a single set of coords
-    json.features.forEach(feature =>
-      coords = coords.concat(feature.geometry.coordinates)
-    );
 
     coords.forEach(coord => {
       var marker = L.circleMarker([coord[1], coord[0]], {
+        color: '#208eff',
         interactive: false,
         opacity: .4,
         pane: 'cables', // controls stacking order
@@ -132,19 +140,6 @@ var Cable = function (options) {
     });
 
     return points;
-  };
-
-  /**
-   * Get the Popup's HTML content (a placeholder until its data is loaded).
-   *
-   * @return {String}
-   */
-  _getPopup = function () {
-    return '' +
-      '<div class="cable">' +
-        `<h4>${_this.name} Experiments</h4>` +
-        '<div class="spinner"></div>' +
-      '<div>';
   };
 
   /**
@@ -173,7 +168,7 @@ var Cable = function (options) {
     if (_this.id !== metadata.cable) {
       _app.Features.createFeatures('cable', {
         cable: _this.id,
-        cableName: _this.name
+        name: _this.name
       });
     } else {
       _addListeners(el);
@@ -191,6 +186,26 @@ var Cable = function (options) {
     sessionStorage.removeItem('cable');
     sessionStorage.removeItem('experiment');
     sessionStorage.removeItem('shakemap');
+  };
+
+  /**
+   * Render the Feature and add the Leaflet Popup, Tooltip and Events.
+   *
+   * @param feature {Object}
+   * @param layer {L.Layer}
+   */
+  _render = function (feature, layer) {
+    _this.mapLayer.addLayer(layer) // Polyline
+      .addLayer(_getPoints(feature))
+      .bindTooltip(_this.name)
+      .bindPopup(_getContent(_this.name), {
+        maxWidth: 600,
+        minWidth: 300
+      })
+      .on({
+        popupclose: _onPopupClose,
+        popupopen: _onPopupOpen
+      });
   };
 
   /**
@@ -225,19 +240,6 @@ var Cable = function (options) {
         title = `${_this.name} Experiment ${number}`;
 
     metadata.lightbox.setTitle(title).setContent(content).show(true);
-  };
-
-  /**
-   * Get the Leaflet Polyline's style attributes.
-   *
-   * @return {Object}
-   */
-  _style = function () {
-    return {
-      opacity: 0.6,
-      pane: 'cables', // controls stacking order
-      weight: 5
-    };
   };
 
   /**
@@ -293,61 +295,22 @@ var Cable = function (options) {
 
     _addExperiment = null;
     _addListeners = null;
+    _getContent = null;
     _getPoints = null;
-    _getPopup = null;
     _onPopupClose = null;
     _onPopupOpen = null;
     _removeExperiment = null;
+    _render = null;
     _selectButton = null;
     _showDetails = null;
-    _style = null;
     _toggleExperiment = null;
 
     _this = null;
   };
 
   /**
-   * Fetch the feed data and add its map layer.
-   */
-  _this.fetch = function () {
-    var line = L.geoJSON.async(_this.url, {
-      app: _app,
-      feature: _this,
-      style: _style
-    });
-
-    _this.mapLayer.addLayer(line);
-  };
-
-  /**
-   * Render the Feature.
-   *
-   * @param json {Object} default is {}
-   */
-  _this.render = function (json = {}) {
-    var cables = _app.Features.getFeature('cables'),
-        bounds = cables.mapLayer.getBounds();
-
-    if (cables.getStatus() === 'ready') {
-      _app.MapPane.fitBounds(bounds, true);
-    }
-
-    _this.mapLayer.addLayer(_getPoints(json))
-      .bindTooltip(_this.name)
-      .bindPopup(_getPopup(), {
-        maxWidth: 600,
-        minWidth: 300
-      });
-
-    _this.mapLayer.on({
-      popupclose: _onPopupClose,
-      popupopen: _onPopupOpen
-    });
-  };
-
-  /**
-   * Affix Popup to Cable (becomes "detached" when the map is zoomed to fit the
-   * bounds of an experiment's Features).
+   * Affix Popup to Cable (becomes "detached" when the map is zoomed to fit
+   * the bounds of an experiment's Features).
    */
   _this.setPopup = function () {
     if (_this.mapLayer.isPopupOpen()) {

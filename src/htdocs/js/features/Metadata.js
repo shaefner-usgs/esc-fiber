@@ -14,7 +14,7 @@ var AppUtil = require('util/AppUtil'),
  *     {
  *       app: {Object} Application
  *       cable: {String} cable id
- *       cableName: {String} cable name
+ *       name: {String} cable name
  *     }
  *
  * @return _this {Object}
@@ -36,15 +36,17 @@ var Metadata = function (options) {
       _initialize,
 
       _app,
+      _location,
 
-      _getData,
-      _getPopup;
+      _getContent,
+      _getData;
 
 
   _this = {};
 
   _initialize = function (options = {}) {
     _app = options.app;
+    _location = options.name;
 
     _this.cable = options.cable;
     _this.data = {};
@@ -52,62 +54,16 @@ var Metadata = function (options) {
     _this.lightbox = Lightbox({
       id: _this.id
     });
-    _this.name = options.cableName + ' Experiments';
-    _this.url = `json/${options.cable}.json`;
+    _this.name = _location + ' Experiments';
+    _this.url = `json/metadata.json.php?cable=${_this.cable}`;
   };
 
   /**
-   * Get the data used to create the content.
-   *
-   * @param json {Object}
-   *
-   * @return data {Object}
-   */
-  _getData = function (json) {
-    var data = {};
-
-    Object.keys(json).forEach(id => {
-      var experiment = json[id],
-          enddate = experiment.Overview.end_date,
-          endtime = experiment.Acquisition.acquisition_end_time,
-          startdate = experiment.Overview.start_date,
-          starttime = experiment.Acquisition.acquisition_start_time;
-
-      data[id] = {
-        channels: experiment.Acquisition.number_of_channels || '',
-        doi: experiment.Overview.digital_object_identifier || '–',
-        email: experiment.Overview.principal_investigator_email || '',
-        enddate: Luxon.DateTime.fromSQL(enddate).toFormat(_app.dateFormat),
-        endtime: Luxon.DateTime.fromISO(endtime).toFormat(_app.timeFormat),
-        endtimeISO: endtime.slice(0, -5),
-        experiment: id,
-        gauge_length: experiment.Acquisition.gauge_length || '',
-        gauge_length_unit: experiment.Acquisition.gauge_length_unit || '',
-        interval: experiment.Acquisition.spatial_sampling_interval,
-        interval_unit: experiment.Acquisition.spatial_sampling_interval_unit || '',
-        location: experiment.Overview.location || '',
-        manufacturer: experiment.Interrogator.manufacturer || '',
-        model: experiment.Interrogator.model || '',
-        name: experiment.Overview.principal_investigator_name || '',
-        number: id.match(/\d+$/)[0],
-        rate: experiment.Acquisition.acquisition_sample_rate,
-        rate_unit: experiment.Acquisition.acquisition_sample_rate_unit || '',
-        reference: experiment.Overview.comment || '–',
-        startdate: Luxon.DateTime.fromSQL(startdate).toFormat(_app.dateFormat),
-        starttime: Luxon.DateTime.fromISO(starttime).toFormat(_app.timeFormat),
-        starttimeISO: starttime.slice(0, -5)
-      };
-    });
-
-    return data;
-  };
-
-  /**
-   * Get the CableLine Popup's HTML content.
+   * Get the HTML content that's added to the Cable Popup.
    *
    * @return html {String}
    */
-  _getPopup = function () {
+  _getContent = function () {
     var html =
       '<div class="cable">' +
         `<h4>${_this.name}</h4>`;
@@ -140,6 +96,50 @@ var Metadata = function (options) {
     return html;
   };
 
+  /**
+   * Get the data used to create the content.
+   *
+   * @param json {Object}
+   *
+   * @return data {Object}
+   */
+  _getData = function (json) {
+    var data = {},
+        experiments = json.experiments;
+
+    Object.keys(experiments).forEach(id => {
+      var experiment = experiments[id],
+          enddate = Luxon.DateTime.fromSQL(experiment.Overview.enddate),
+          endtime = Luxon.DateTime.fromSQL(experiment.Acquisition.endtime),
+          startdate = Luxon.DateTime.fromSQL(experiment.Overview.startdate),
+          starttime = Luxon.DateTime.fromSQL(experiment.Acquisition.starttime);
+
+      data[id] = {
+        channels: experiment.Acquisition.channels || '',
+        doi: experiment.Overview.doi || '–',
+        email: experiment.Overview.pi_email || '',
+        enddate: enddate.toFormat(_app.dateFormat),
+        endtime: endtime.toFormat(_app.timeFormat),
+        endtimeISO: endtime.toISO()?.slice(0, -10), // ? checks if null
+        experiment: id,
+        interval: experiment.Acquisition.interval,
+        length: experiment.Acquisition.length || '',
+        location: _location,
+        manufacturer: experiment.Interrogator.manufacturer || '',
+        model: experiment.Interrogator.model || '',
+        name: experiment.Overview.pi || '',
+        number: id.match(/\d+$/)[0],
+        rate: experiment.Acquisition.rate,
+        reference: experiment.Overview.reference || '–',
+        startdate: startdate.toFormat(_app.dateFormat),
+        starttime: starttime.toFormat(_app.timeFormat),
+        starttimeISO: starttime.toISO()?.slice(0, -10) // ? checks if null
+      };
+    });
+
+    return data;
+  };
+
   // ----------------------------------------------------------
   // Public methods
   // ----------------------------------------------------------
@@ -151,9 +151,10 @@ var Metadata = function (options) {
     _initialize = null;
 
     _app = null;
+    _location = null;
 
+    _getContent = null;
     _getData = null;
-    _getPopup = null;
 
     _this = null;
   };
@@ -218,13 +219,13 @@ var Metadata = function (options) {
             '<dt>End Time</dt>' +
             '<dd>{endtime}</dd>' +
             '<dt>Sample Rate</dt>' +
-            '<dd>{rate} {rate_unit}</dd>' +
+            '<dd>{rate}</dd>' +
             '<dt>Channels</dt>' +
             '<dd>{channels}</dd>' +
             '<dt>Spatial Interval</dt>' +
-            '<dd>{interval} {interval_unit}</dd>' +
+            '<dd>{interval}</dd>' +
             '<dt>Gauge Length</dt>' +
-            '<dd>{gauge_length} {gauge_length_unit}</dd>' +
+            '<dd>{length}</dd>' +
           '</dl>' +
         '</section>' +
       '</div>' +
@@ -258,7 +259,7 @@ var Metadata = function (options) {
       _this.lightbox.render();
     }
 
-    cable.addContent(_getPopup());
+    cable.addContent(_getContent());
   };
 
 
