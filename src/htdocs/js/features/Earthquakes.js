@@ -97,10 +97,10 @@ var Earthquakes = function (options) {
       _addShakeMap,
       _deleteParams,
       _getAge,
+      _getContent,
       _getEq,
       _getFillColor,
       _getLevel,
-      _getPopup,
       _getRadius,
       _getTooltip,
       _getUrl,
@@ -259,6 +259,38 @@ var Earthquakes = function (options) {
   };
 
   /**
+   * Get the Popup's HTML content for the given earthquake.
+   *
+   * @param eq {Object}
+   *
+   * @return {String}
+   */
+  _getContent = function (eq) {
+    return L.Util.template(
+      '<div id="{id}" class="earthquake">' +
+        '<h4>' +
+          '<a href="https://earthquake.usgs.gov/response/?eqid={id}" target="new">{title}</a>' +
+        '</h4>' +
+        '<div class="impact-bubbles">' +
+          '{cdiBubble}{mmiBubble}{alertBubble}{tsunamiBubble}' +
+        '</div>' +
+        '<dl class="props">' +
+          '<dt class="time">Time</dt>' +
+          '<dd class="time">{timeDisplay}</dd>' +
+          '<dt>Depth</dt>' +
+          '<dd>{depthDisplay}</dd>' +
+          '<dt>Location</dt>' +
+          '<dd>{location}</dd>' +
+          '<dt class="status">Status</dt>' +
+          '<dd class="status">{status}{statusIcon}</dd>' +
+        '</dl>' +
+        '{shakemap}' +
+      '</div>',
+      eq
+    );
+  };
+
+  /**
    * Get the earthquake (with convenience props set) for the given GeoJSON
    * feature, which is used to create the map layer.
    *
@@ -374,38 +406,6 @@ var Earthquakes = function (options) {
   };
 
   /**
-   * Get the HTML content for the given earthquake's Leaflet Popup.
-   *
-   * @param eq {Object}
-   *
-   * @return {String}
-   */
-  _getPopup = function (eq) {
-    return L.Util.template(
-      '<div id="{id}" class="earthquake">' +
-        '<h4>' +
-          '<a href="https://earthquake.usgs.gov/response/?eqid={id}" target="new">{title}</a>' +
-        '</h4>' +
-        '<div class="impact-bubbles">' +
-          '{cdiBubble}{mmiBubble}{alertBubble}{tsunamiBubble}' +
-        '</div>' +
-        '<dl class="props">' +
-          '<dt class="time">Time</dt>' +
-          '<dd class="time">{timeDisplay}</dd>' +
-          '<dt>Depth</dt>' +
-          '<dd>{depthDisplay}</dd>' +
-          '<dt>Location</dt>' +
-          '<dd>{location}</dd>' +
-          '<dt class="status">Status</dt>' +
-          '<dd class="status">{status}{statusIcon}</dd>' +
-        '</dl>' +
-        '{shakemap}' +
-      '</div>',
-      eq
-    );
-  };
-
-  /**
    * Get the circle marker radius for the given eq magnitude, rounded to the
    * nearest tenth.
    *
@@ -479,7 +479,7 @@ var Earthquakes = function (options) {
     var div = L.DomUtil.create('div'),
         eq = _getEq(feature);
 
-    div.innerHTML = _getPopup(eq);
+    div.innerHTML = _getContent(eq);
 
     layer.bindPopup(div, {
       minWidth: 365
@@ -593,10 +593,10 @@ var Earthquakes = function (options) {
     _addShakeMap = null;
     _deleteParams = null;
     _getAge = null;
+    _getContent = null;
     _getEq = null;
     _getFillColor = null;
     _getLevel = null;
-    _getPopup = null;
     _getRadius = null;
     _getTooltip = null;
     _getUrl = null;
@@ -641,7 +641,11 @@ var Earthquakes = function (options) {
    * @param json {Object} default is {}
    */
   _this.render = function (json = {}) {
-    _this.count = json.features?.length;
+    if (!AppUtil.isEmpty(json)) { // initial render
+      _this.count = json.features?.length;
+    } else {
+      _this.mapLayer.addCount();
+    }
 
     _app.MapPane.addFeature(_this);
 
