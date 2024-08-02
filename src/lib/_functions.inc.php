@@ -1,22 +1,6 @@
 <?php
 
 /**
- * Set HTTP Headers.
- *
- * @param $header {String}
- *     Optional additional header to set
- */
-function setHeaders($header = '') {
-  if ($header) {
-    header($header);
-  } else { // default headers (for all responses)
-    header('Cache-control: no-cache, must-revalidate');
-    header('Content-Type: application/json');
-    header('Expires: ' . date(DATE_RFC2822));
-  }
-}
-
-/**
  * Sanitize a URL parameter value.
  *
  * @param $name {String}
@@ -36,4 +20,20 @@ function safeParam ($name, $default='') {
   }
 
   return $value;
+}
+
+/**
+ * Set HTTP Headers.
+ *
+ * @param $header {String}
+ *     Optional additional header to set
+ */
+function setHeaders($header = '') {
+  if ($header) {
+    header($header);
+  } else { // default headers (for all responses)
+    header('Cache-control: no-cache, must-revalidate');
+    header('Content-Type: application/json');
+    header('Expires: ' . date(DATE_RFC2822));
+  }
 }
