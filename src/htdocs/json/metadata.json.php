@@ -45,7 +45,7 @@ while ($ref = $rsReferences->fetch(PDO::FETCH_OBJ)) {
 // Add experiments to template.
 while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
   $key = 'experiment' . $exp->experiment_id;
-  $path = $_SERVER['DOCUMENT_ROOT'] . '/img/plots';
+  $path = $APP_DIR . '/htdocs/img/plots';
   $plot = $exp->cable_id . '-' . $exp->experiment_id . '.png';
 
   if (!file_exists("$path/$plot")) {

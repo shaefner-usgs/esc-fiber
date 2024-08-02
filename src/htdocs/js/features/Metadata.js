@@ -159,7 +159,7 @@ var Metadata = function (options) {
     if (plot) {
       html =
         '<h4>Data Quality</h4>' +
-        `<img src="/img/plots/${plot}" alt="waterfall plot">`;
+        `<img src="img/plots/${plot}" alt="waterfall plot">`;
     }
 
     return html;
