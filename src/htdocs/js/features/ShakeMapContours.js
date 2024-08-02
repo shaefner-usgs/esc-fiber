@@ -82,7 +82,6 @@ var ShakeMapContours = function (options) {
     return {
       color: feature.properties.color,
       opacity: 0.8,
-      pane: 'shakemap-contours', // controls stacking order
       weight: 4
     };
   };
@@ -116,6 +115,7 @@ var ShakeMapContours = function (options) {
       app: _app,
       feature: _this,
       onEachFeature: _onEachFeature,
+      pane: 'shakemap-contours', // controls stacking order
       style: _style
     });
   };
