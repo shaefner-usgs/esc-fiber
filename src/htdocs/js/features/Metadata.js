@@ -39,7 +39,8 @@ var Metadata = function (options) {
       _location,
 
       _getContent,
-      _getData;
+      _getData,
+      _getReferences;
 
 
   _this = {};
@@ -131,6 +132,7 @@ var Metadata = function (options) {
         number: id.match(/\d+$/)[0],
         rate: experiment.Acquisition.rate,
         reference: experiment.Overview.reference || '–',
+        references: experiment.References,
         startdate: startdate.toFormat(_app.dateFormat),
         starttime: starttime.toFormat(_app.timeFormat),
         starttimeISO: starttime.toISO()?.slice(0, -10) // ? checks if null
@@ -138,6 +140,38 @@ var Metadata = function (options) {
     });
 
     return data;
+  };
+
+  /**
+   * Get the HTML for the given experiment's references list.
+   *
+   * @param id {String}
+   *     Experiment id
+   *
+   * @return html {String}
+   */
+  _getReferences = function (id) {
+    var html = '',
+        lis = '';
+
+    _this.data[id].references.forEach(reference => {
+      lis += L.Util.template(
+        '<li>' +
+          '{author}, <a href="{doi}">{title}</a>, {year}' +
+        '</li>',
+        reference
+      );
+    });
+
+    if (lis) {
+      html =
+        '<h4>Additional References</h4>' +
+        '<ul class="refs">' +
+          lis +
+        '</ul>';
+    }
+
+    return html;
   };
 
   // ----------------------------------------------------------
@@ -155,6 +189,7 @@ var Metadata = function (options) {
 
     _getContent = null;
     _getData = null;
+    _getReferences = null;
 
     _this = null;
   };
@@ -178,7 +213,8 @@ var Metadata = function (options) {
    * @return {String}
    */
   _this.getContent = function (id) {
-    var data = Object.assign({}, _this.data[id]);
+    var data = Object.assign({}, _this.data[id]),
+        references = _getReferences(id);
 
     if (data.doi !== '–') {
       data.doi = `<a href="${data.doi}">${data.doi}</a>`;
@@ -230,12 +266,13 @@ var Metadata = function (options) {
         '</section>' +
       '</div>' +
       '<h4>Citation</h4>' +
-      '<dl class="props">' +
+      '<dl class="citation props">' +
         '<dt>DOI</dt>' +
         '<dd>{doi}</dd>' +
         '<dt>Reference</dt>' +
         '<dd>{reference}</dd>' +
       '</dl>' +
+      references +
       '<h4>Data Archive</h4>' +
       '<p>Placeholder</p>' +
       '<h4>Data Quality</h4>' +
