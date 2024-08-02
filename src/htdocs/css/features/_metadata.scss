@@ -1,5 +1,9 @@
 @layer default {
   #metadata {
+    h4:first-child {
+      margin-top: .25rem;
+    }
+
     img,
     .citation,
     .refs {
@@ -17,6 +21,7 @@
 
     .refs {
       list-style: none;
+      margin: 1rem 0;
       padding: 0 0 0 2rem;
 
       li {
