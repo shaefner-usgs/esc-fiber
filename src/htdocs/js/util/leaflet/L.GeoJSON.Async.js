@@ -26,7 +26,7 @@ var _DEFAULTS = {
  * @param options {Object}
  *     L.GeoJSON options (optional), plus:
  *
- *     { // enables additional functionality if components (StatusBar, etc) exist
+ *     { options that add functionality if components (StatusBar, etc) exist
  *       app: {Object} optional
  *       feature: {Object} optional
  *     }
