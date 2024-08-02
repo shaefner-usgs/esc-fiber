@@ -40,6 +40,7 @@ var Metadata = function (options) {
 
       _getContent,
       _getData,
+      _getPlot,
       _getReferences;
 
 
@@ -123,14 +124,15 @@ var Metadata = function (options) {
         endtime: endtime.toFormat(_app.timeFormat),
         endtimeISO: endtime.toISO()?.slice(0, -10), // ? checks if null
         experiment: id,
-        interval: experiment.Acquisition.interval,
+        interval: experiment.Acquisition.interval || '',
         length: experiment.Acquisition.length || '',
         location: _location,
         manufacturer: experiment.Interrogator.manufacturer || '',
         model: experiment.Interrogator.model || '',
         name: experiment.Overview.pi || '',
         number: id.match(/\d+$/)[0],
-        rate: experiment.Acquisition.rate,
+        plot: experiment.Overview.plot || '',
+        rate: experiment.Acquisition.rate || '',
         reference: experiment.Overview.reference || '–',
         references: experiment.References,
         startdate: startdate.toFormat(_app.dateFormat),
@@ -140,6 +142,27 @@ var Metadata = function (options) {
     });
 
     return data;
+  };
+
+  /**
+   * Get the HTML for the given experiment's plot.
+   *
+   * @param id {String}
+   *     Experiment id
+   *
+   * @return html {String}
+   */
+  _getPlot = function (id) {
+    var html = '', // default
+        plot = _this.data[id].plot;
+
+    if (plot) {
+      html =
+        '<h4>Data Quality</h4>' +
+        `<img src="/img/plots/${plot}" alt="waterfall plot">`;
+    }
+
+    return html;
   };
 
   /**
@@ -189,6 +212,7 @@ var Metadata = function (options) {
 
     _getContent = null;
     _getData = null;
+    _getPlot = null;
     _getReferences = null;
 
     _this = null;
@@ -214,6 +238,7 @@ var Metadata = function (options) {
    */
   _this.getContent = function (id) {
     var data = Object.assign({}, _this.data[id]),
+        plot = _getPlot(id),
         references = _getReferences(id);
 
     if (data.doi !== '–') {
@@ -265,6 +290,7 @@ var Metadata = function (options) {
           '</dl>' +
         '</section>' +
       '</div>' +
+      plot +
       '<h4>Citation</h4>' +
       '<dl class="citation props">' +
         '<dt>DOI</dt>' +
@@ -274,8 +300,6 @@ var Metadata = function (options) {
       '</dl>' +
       references +
       '<h4>Data Archive</h4>' +
-      '<p>Placeholder</p>' +
-      '<h4>Data Quality</h4>' +
       '<p>Placeholder</p>',
       data
     );

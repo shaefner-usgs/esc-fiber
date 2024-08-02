@@ -45,6 +45,12 @@ while ($ref = $rsReferences->fetch(PDO::FETCH_OBJ)) {
 // Add experiments to template.
 while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
   $key = 'experiment' . $exp->experiment_id;
+  $path = $_SERVER['DOCUMENT_ROOT'] . '/img/plots';
+  $plot = $exp->cable_id . '-' . $exp->experiment_id . '.png';
+
+  if (!file_exists("$path/$plot")) {
+    $plot = '';
+  }
 
   if (array_key_exists($key, $references)) {
     $references = $references[$key];
@@ -68,6 +74,7 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
       'enddate' => $exp->end_date,
       'pi' => $exp->pi,
       'pi_email' => $exp->pi_email,
+      'plot' => $plot,
       'reference' => $exp->reference,
       'startdate' => $exp->start_date
     ],

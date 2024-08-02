@@ -1,12 +1,13 @@
 @layer default {
   #metadata {
-    section {
-      width: 12rem;
-    }
-
+    img,
     .citation,
     .refs {
       max-width: 48rem;
+    }
+
+    section {
+      width: 12rem;
     }
 
     .columns {
