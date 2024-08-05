@@ -195,7 +195,8 @@ var Cable = function (options) {
    * @param layer {L.Layer}
    */
   _render = function (feature, layer) {
-    _this.mapLayer.addLayer(layer) // Polyline
+    _this.mapLayer
+      .addLayer(layer) // Polyline
       .addLayer(_getPoints(feature))
       .bindTooltip(_this.name)
       .bindPopup(_getContent(_this.name), {
@@ -239,7 +240,10 @@ var Cable = function (options) {
         number = id.match(/\d+$/)[0],
         title = `${_this.name} Experiment ${number}`;
 
-    metadata.lightbox.setTitle(title).setContent(content).show(true);
+    metadata.lightbox
+      .setTitle(title)
+      .setContent(content)
+      .show(true);
   };
 
   /**
@@ -309,8 +313,8 @@ var Cable = function (options) {
   };
 
   /**
-   * Affix Popup to Cable (becomes "detached" when the map is zoomed to fit
-   * the bounds of an experiment's Features).
+   * Affix Popup to Cable (becomes "detached" when the map is zoomed to fit the
+   * bounds of an experiment's Features).
    */
   _this.setPopup = function () {
     if (_this.mapLayer.isPopupOpen()) {
