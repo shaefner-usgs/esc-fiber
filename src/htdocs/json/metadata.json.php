@@ -24,17 +24,17 @@ $template = [
   'experiments' => []
 ];
 
-$references = [];
+$refs = [];
 
 // Store references in an Array.
 while ($ref = $rsReferences->fetch(PDO::FETCH_OBJ)) {
   $key = 'experiment' . $ref->experiment_id;
 
-  if (!array_key_exists($key, $references)) {
-    $references[$key] = [];
+  if (!array_key_exists($key, $refs)) {
+    $refs[$key] = [];
   }
 
-  $references[$key][] = [
+  $refs[$key][] = [
     'author' => $ref->author,
     'doi' => $ref->doi,
     'title' => $ref->title,
@@ -47,13 +47,13 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
   $key = 'experiment' . $exp->experiment_id;
   $path = $APP_DIR . '/htdocs/img/plots';
   $plot = $exp->cable_id . '-' . $exp->experiment_id . '.png';
+  $references = []; // default
 
   if (!file_exists("$path/$plot")) {
     $plot = '';
   }
-
-  if (array_key_exists($key, $references)) {
-    $references = $references[$key];
+  if (array_key_exists($key, $refs)) {
+    $references = $refs[$key];
   }
 
   $template['experiments'][$key] = [
