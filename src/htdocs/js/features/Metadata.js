@@ -180,7 +180,7 @@ var Metadata = function (options) {
     _this.data[id].references.forEach(reference => {
       lis += L.Util.template(
         '<li>' +
-          '{author}, <a href="{doi}">{title}</a>, {year}' +
+          '{author}, <a href="{doi}">{title}</a>, {year}.' +
         '</li>',
         reference
       );
