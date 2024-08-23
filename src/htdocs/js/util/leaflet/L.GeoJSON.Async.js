@@ -94,30 +94,17 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
    * fails.
    *
    * @param error {Object}
-   * @param response {Object}
-   * @param type {String <network|notfound|timeout>} optional; default is ''
+   * @param message {String}
+   * @param status {String}
    */
-  _addError: function (error, response, type = '') {
-    var feature = this._feature,
-        message = `<h4>Error Loading ${feature.name || 'Feature'}</h4>`;
-
-    if (type === 'notfound') {
-      message += '<p>Resource not found (Error 404)</p>';
-    } else if (type === 'timeout') {
-      message += `<p>Request timed out (can’t connect to ${this._url.hostname})</p>`;
-    } else if (type === 'network') {
-      message += '<p>Network error</p>';
-    } else if (response.status !== 200) {
-      message += `<p>Error code: ${response.status} (${response.statusText})</p>`;
-    } else { // generic error message
-      message += `<p>${error.message}</p>`;
-    }
+  _addError: function (error, message, status) {
+    var feature = this._feature;
 
     this._app.StatusBar?.addError({
       id: feature.id,
       message: message,
       mode: feature.mode,
-      status: response.status
+      status: status
     });
 
     console.error(error);
@@ -143,7 +130,7 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
    * Fetch and add the JSON data; set the error type on failure.
    */
   _fetch: async function () {
-    var type,
+    var message, type,
         feature = this._feature,
         response = {};
 
@@ -171,9 +158,43 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
         type = 'notfound';
       }
 
-      this._addError(error, response, type);
+      message = this._getMessage(error, response, type);
+
+      this._addError(error, message, response.status);
       this._cleanup();
     }
+  },
+
+  /**
+   * Get the error message.
+   *
+   * @param error {Object}
+   * @param response {Object}
+   * @param type {String <network|notfound|timeout>} optional; default is ''
+   *
+   * @return message {String}
+   */
+  _getMessage: function (error, response, type = '') {
+    var description = '',
+        message = `<h4>Error Loading ${this._feature.name || 'Feature'}</h4>`;
+
+    if (type === 'notfound') {
+      message += '<p>Error 404 (Not Found)</p>';
+    } else if (type === 'timeout') {
+      message += `<p>Request timed out (can’t connect to ${this._url.hostname})</p>`;
+    } else if (type === 'network') {
+      message += '<p>Network error</p>';
+    } else if (response.status !== 200) {
+      if (response.statusText) {
+        description = '(' + response.statusText + ')';
+      }
+
+      message += `<p>Error ${response.status} ${description}</p>`;
+    } else { // generic error message
+      message += `<p>${error.message}</p>`;
+    }
+
+    return message;
   },
 
   /**
