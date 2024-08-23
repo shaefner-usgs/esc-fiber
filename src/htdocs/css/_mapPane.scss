@@ -33,8 +33,11 @@
     .leaflet-earthquakes-pane {
       z-index: 423;
     }
-    .leaflet-shakemap-contours-pane {
+    .leaflet-seismic-stations-pane {
       z-index: 422;
+    }
+    .leaflet-shakemap-contours-pane {
+      z-index: 421;
     }
 
     // Hide attribution text on (small screen) mobile devices

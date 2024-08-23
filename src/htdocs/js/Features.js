@@ -6,6 +6,7 @@ var Cables = require('features/Cables'),
     Earthquakes = require('features/Earthquakes'),
     Experiment = require('features/Experiment'),
     Metadata = require('features/Metadata'),
+    SeismicStations = require('features/SeismicStations'),
     ShakeMapContours = require('features/ShakeMapContours');
 
 
@@ -18,7 +19,8 @@ var _MODULES = {
   ],
   experiment: [ // Features added when an experiment is selected
     Experiment,
-    Earthquakes
+    Earthquakes,
+    SeismicStations
   ],
   shakemap: [ // Features added when a ShakeMap is selected
     Earthquake,
