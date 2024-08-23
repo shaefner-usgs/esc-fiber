@@ -4,8 +4,6 @@ include_once '../../conf/config.inc.php'; // app config
 include_once '../../lib/_functions.inc.php'; // app functions
 include_once '../../lib/classes/Db.class.php'; // db connector, queries
 
-setHeaders();
-
 $db = new Db();
 $rsCables = $db->queryCables();
 
@@ -45,7 +43,10 @@ while ($point = $rsCables->fetch(PDO::FETCH_OBJ)) {
     $names[$id] = $point->name;
   }
 
-  $coords[$id][] = [floatval($point->lng), floatval($point->lat)];
+  $coords[$id][] = [
+    floatval($point->lng),
+    floatval($point->lat)
+  ];
 }
 
 // Add features (LineStrings) to template.
@@ -56,5 +57,7 @@ foreach($names as $id => $name) {
 
   $template['features'][] = $feature;
 }
+
+setHeaders();
 
 print json_encode($template, JSON_UNESCAPED_SLASHES);

@@ -4,8 +4,6 @@ include_once '../../conf/config.inc.php'; // app config
 include_once '../../lib/_functions.inc.php'; // app functions
 include_once '../../lib/classes/Db.class.php'; // db connector, queries
 
-setHeaders();
-
 $cable = safeParam('cable');
 
 $db = new Db();
@@ -81,5 +79,7 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
     'References' => $references
   ];
 }
+
+setHeaders();
 
 print json_encode($template, JSON_UNESCAPED_SLASHES);
