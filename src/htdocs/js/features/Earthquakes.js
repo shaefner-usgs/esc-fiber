@@ -459,8 +459,6 @@ var Earthquakes = function (options) {
 
       if (name === 'minmagnitude') {
         value -= 0.05; // account for rounding to tenths
-      } else if (name === 'latitude' || name === 'longitude') {
-        value = AppUtil.round(value, 3);
       }
 
       pairs.push(name + '=' + value);
