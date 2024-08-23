@@ -180,7 +180,7 @@ var Metadata = function (options) {
     _this.data[id].references.forEach(reference => {
       lis += L.Util.template(
         '<li>' +
-          '{author}, <a href="{doi}">{title}</a>, {year}.' +
+          '{author}, <a href="{doi}" target="new">{title}</a>, {year}.' +
         '</li>',
         reference
       );
@@ -242,10 +242,10 @@ var Metadata = function (options) {
         references = _getReferences(id);
 
     if (data.doi !== '–') {
-      data.doi = `<a href="${data.doi}">${data.doi}</a>`;
+      data.doi = `<a href="${data.doi}" target="new">${data.doi}</a>`;
     }
     if (data.reference !== '–') {
-      data.reference = `<a href="${data.reference}">${data.reference}</a>`;
+      data.reference = `<a href="${data.reference}" target="new">${data.reference}</a>`;
     }
 
     return L.Util.template(
@@ -256,7 +256,7 @@ var Metadata = function (options) {
             '<dt>Location</dt>' +
             '<dd>{location}</dd>' +
             '<dt>Principle Investigator</dt>' +
-            '<dd><a href="mailto:{email}">{name}</a></dd>' +
+            '<dd>{name}</dd>' +
             '<dt>Start Date</dt>' +
             '<dd>{startdate}</dd>' +
             '<dt>End Date</dt>' +
