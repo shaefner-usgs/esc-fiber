@@ -1,0 +1,29 @@
+.leaflet-seismic-stations-pane {
+  .station {
+    opacity: .75;
+    position: absolute;
+
+    &:after,
+    &:before {
+      border: solid transparent;
+      content: '';
+      position: absolute;
+    }
+
+    &:after { // outline
+      border-bottom-color: rgba(0, 0, 0, .6);
+      border-width: 12px 8px;
+      left: -1px;
+      top: -13px;
+      z-index: 1;
+    }
+
+    &:before { // symbol
+      border-bottom-color: #00f;
+      border-width: 10px 6px;
+      left: 1px;
+      top: -10px;
+      z-index: 2;
+    }
+  }
+}
