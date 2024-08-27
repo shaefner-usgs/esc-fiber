@@ -110,7 +110,7 @@ var Cable = function (options) {
   _getContent = function () {
     return '' +
       '<div class="cable">' +
-        `<h4>${_this.name} Experiments</h4>` +
+        `<h4>${_this.name}</h4>` +
         '<div class="spinner"></div>' +
       '<div>';
   };

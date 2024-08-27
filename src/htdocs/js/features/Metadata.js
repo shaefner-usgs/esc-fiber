@@ -36,7 +36,6 @@ var Metadata = function (options) {
       _initialize,
 
       _app,
-      _location,
 
       _getContent,
       _getData,
@@ -48,7 +47,6 @@ var Metadata = function (options) {
 
   _initialize = function (options = {}) {
     _app = options.app;
-    _location = options.name;
 
     _this.cable = options.cable;
     _this.data = {};
@@ -56,7 +54,7 @@ var Metadata = function (options) {
     _this.lightbox = Lightbox({
       id: _this.id
     });
-    _this.name = _location + ' Experiments';
+    _this.name = options.name;
     _this.url = `json/metadata.json.php?cable=${_this.cable}`;
   };
 
@@ -68,7 +66,8 @@ var Metadata = function (options) {
   _getContent = function () {
     var html =
       '<div class="cable">' +
-        `<h4>${_this.name}</h4>`;
+        `<h4>${_this.name}</h4>` +
+        '<h5>Experiments</h5>';
 
     if (AppUtil.isEmpty(_this.data)) {
       html += '<p>None</p>';
@@ -126,7 +125,7 @@ var Metadata = function (options) {
         experiment: id,
         interval: experiment.Acquisition.interval || '',
         length: experiment.Acquisition.length || '',
-        location: _location,
+        location: _this.name,
         manufacturer: experiment.Interrogator.manufacturer || '',
         model: experiment.Interrogator.model || '',
         name: experiment.Overview.pi || '',
@@ -208,7 +207,6 @@ var Metadata = function (options) {
     _initialize = null;
 
     _app = null;
-    _location = null;
 
     _getContent = null;
     _getData = null;
