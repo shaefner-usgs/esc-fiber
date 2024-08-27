@@ -139,6 +139,7 @@ var Cables = function (options) {
     _this.mapLayer = L.geoJSON.async(_this.url, {
       app: _app,
       feature: _this,
+      host: 'iris.edu', // PHP script on localhost fetches data from IRIS
       onEachFeature: _onEachFeature,
       pointToLayer: _pointToLayer
     });

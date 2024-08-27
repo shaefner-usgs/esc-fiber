@@ -10,6 +10,7 @@ var AppUtil = require('util/AppUtil');
 var _DEFAULTS = {
   app: {},
   feature: {},
+  host: '',
   pointToLayer: function() {} // only fetch and return JSON data by default
 };
 
@@ -29,6 +30,7 @@ var _DEFAULTS = {
  *     { options that add functionality if components (StatusBar, etc) exist
  *       app: {Object} optional
  *       feature: {Object} optional
+ *       host: {String} optional; for stations fetched via a local php script
  *     }
  */
 L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
@@ -39,6 +41,7 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
 
     this._app = options.app;
     this._feature = options.feature;
+    this._host = options.host;
     this._json = {};
     this._url = new URL(url, location.origin + path);
 
@@ -47,6 +50,7 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
     // Delete internal, non-L.GeoJSON options
     delete options.app;
     delete options.feature;
+    delete options.host;
 
     L.GeoJSON.prototype.initialize.call(this, null, options);
   },
@@ -176,12 +180,13 @@ L.GeoJSON.Async = L.GeoJSON.DateLine.extend({
    */
   _getMessage: function (error, response, type = '') {
     var description = '',
+        host = this._host || this._url.hostname,
         message = `<h4>Error Loading ${this._feature.name || 'Feature'}</h4>`;
 
     if (type === 'notfound') {
       message += '<p>Error 404 (Not Found)</p>';
     } else if (type === 'timeout') {
-      message += `<p>Request timed out (can’t connect to ${this._url.hostname})</p>`;
+      message += `<p>Request timed out (can’t connect to ${host})</p>`;
     } else if (type === 'network') {
       message += '<p>Network error</p>';
     } else if (response.status !== 200) {
