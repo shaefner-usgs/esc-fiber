@@ -57,10 +57,14 @@ L.Control.Zoom.Reset = L.Control.extend({
 
   /**
    * Click handler for the button.
+   *
+   * @param e {Event}
    */
-  _setExtent: function () {
+  _setExtent: function (e) {
     var app = this.options.app,
         bounds = app.MapPane.initialBounds;
+
+    e.preventDefault();
 
     app.MapPane.fitBounds(bounds);
   }
