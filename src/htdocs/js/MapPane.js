@@ -198,14 +198,17 @@ var MapPane = function (options) {
    * @param initial {Boolean} optional; default is false
    */
   _this.fitBounds = function (bounds = _bounds, initial = false) {
-    if (bounds.isValid()) {
-      _map.fitBounds(bounds, {
-        paddingTopLeft: [0, 65]
-      });
+    var opts = {
+      paddingTopLeft: [0, 65]
+    };
 
+    if (bounds.isValid()) {
       if (initial) {
         _this.initialBounds = bounds; // cache value
+        opts.animate = false;
       }
+
+      _map.fitBounds(bounds, opts);
     }
   };
 
