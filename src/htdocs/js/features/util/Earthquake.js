@@ -75,7 +75,7 @@ var Earthquake = function (options) {
         shakemap = _app.Features.getFeature('shakemap-contours');
 
     shakemap.eqid = json.id;
-    shakemap.url = product.contents?.['download/cont_mmi.json']?.url || '';
+    shakemap.url = product.contents?.['download/cont_mi.json']?.url || '';
   };
 
 
