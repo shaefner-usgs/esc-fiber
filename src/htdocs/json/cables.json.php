@@ -32,6 +32,7 @@ $feature = [
 ];
 
 $coords = [];
+$features = [];
 $names = [];
 
 // Store cable data in Arrays.
@@ -49,14 +50,17 @@ while ($point = $rsCables->fetch(PDO::FETCH_OBJ)) {
   ];
 }
 
-// Add features (LineStrings) to template.
+// Store features in an Array.
 foreach($names as $id => $name) {
   $feature['id'] = $id;
   $feature['geometry']['coordinates'] = $coords[$id];
   $feature['properties']['name'] = $name;
 
-  $template['features'][] = $feature;
+  $features[] = $feature;
 }
+
+// Render the JSON feed
+$template['features'] = $features;
 
 setHeaders();
 

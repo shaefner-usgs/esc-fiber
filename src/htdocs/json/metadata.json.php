@@ -22,6 +22,7 @@ $template = [
   'experiments' => []
 ];
 
+$experiments = [];
 $refs = [];
 
 // Store references in an Array.
@@ -40,7 +41,7 @@ while ($ref = $rsReferences->fetch(PDO::FETCH_OBJ)) {
   ];
 }
 
-// Add experiments to template.
+// Store experiments in an Array (add add the references).
 while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
   $key = 'experiment' . $exp->experiment_id;
   $path = $APP_DIR . '/htdocs/img/plots';
@@ -54,7 +55,7 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
     $references = $refs[$key];
   }
 
-  $template['experiments'][$key] = [
+  $experiments[$key] = [
     'Acquisition' => [
       'channels' => $exp->channels,
       'endtime' => $exp->end_time,
@@ -79,6 +80,9 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
     'References' => $references
   ];
 }
+
+// Render the JSON feed
+$template['experiments'] = $experiments;
 
 setHeaders();
 

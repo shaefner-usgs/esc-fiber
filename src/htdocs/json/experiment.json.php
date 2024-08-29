@@ -34,7 +34,9 @@ $feature = [
   ]
 ];
 
-// Add features (Points) to template.
+$features = [];
+
+// Store features in an Array.
 while ($point = $rsExperiment->fetch(PDO::FETCH_OBJ)) {
   $feature['id'] = $point->channel_id;
   $feature['geometry']['coordinates'] = [
@@ -43,8 +45,11 @@ while ($point = $rsExperiment->fetch(PDO::FETCH_OBJ)) {
   ];
   $feature['properties']['distance'] = floatval($point->distance);
 
-  $template['features'][] = $feature;
+  $features[] = $feature;
 }
+
+// Render the JSON feed
+$template['features'] = $features;
 
 setHeaders();
 
