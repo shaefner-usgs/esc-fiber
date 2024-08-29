@@ -81,6 +81,7 @@ _MARKERS = {
  *       mapLayer: {L.GeoJSON}
  *       name: {String}
  *       remove: {Function}
+ *       removeShakeMap: {Function}
  *       render: {Function}
  *       url: {String}
  *     }
@@ -108,7 +109,6 @@ var Earthquakes = function (options) {
       _onPopupClose,
       _onPopupOpen,
       _pointToLayer,
-      _removeShakeMap,
       _selectButton,
       _toggleShakeMap;
 
@@ -531,15 +531,6 @@ var Earthquakes = function (options) {
   };
 
   /**
-   * Remove an existing earthquake's ShakeMap Contours.
-   */
-  _removeShakeMap = function () {
-    _app.Features.removeFeatures('shakemap');
-
-    sessionStorage.removeItem('shakemap');
-  };
-
-  /**
    * Select the ShakeMap Contours button (if applicable).
    */
   _selectButton = function () {
@@ -562,7 +553,7 @@ var Earthquakes = function (options) {
 
     button.classList.remove('no-animation');
 
-    _removeShakeMap();
+    _this.removeShakeMap();
 
     if (button.classList.contains('selected')) { // turn off
       button.classList.remove('selected');
@@ -602,7 +593,6 @@ var Earthquakes = function (options) {
     _onPopupClose = null;
     _onPopupOpen = null;
     _pointToLayer = null;
-    _removeShakeMap = null;
     _selectButton = null;
     _toggleShakeMap = null;
 
@@ -631,6 +621,15 @@ var Earthquakes = function (options) {
     });
 
     _app.MapPane.removeFeature(_this);
+  };
+
+  /**
+   * Remove an earthquake's ShakeMap Contours.
+   */
+  _this.removeShakeMap = function () {
+    _app.Features.removeFeatures('shakemap');
+
+    sessionStorage.removeItem('shakemap');
   };
 
   /**
