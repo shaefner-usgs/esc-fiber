@@ -30,6 +30,7 @@ var ShakeMapContours = function (options) {
 
       _app,
 
+      _handleError,
       _onEachFeature,
       _onMouseOver,
       _style;
@@ -43,8 +44,28 @@ var ShakeMapContours = function (options) {
     _this.dependencies = ['earthquake'];
     _this.eqid = ''; // set by Earthquake Feature
     _this.id = 'shakemap-contours';
+    _this.mapLayer = L.featureGroup(); // default (useful if no data is fetched)
     _this.name = 'ShakeMap Contours';
     _this.url = ''; // set by Earthquake Feature
+  };
+
+  /**
+   * Show an error when Earthquake feature is missing the ShakeMap Contours URL
+   * and set UI state.
+   */
+  _handleError = function () {
+    var button = document.querySelector('.shakemap.selected'),
+        earthquakes = _app.Features.getFeature('earthquakes'),
+        message = `<h4>Error Loading ${_this.name}</h4><p>Error 404 (Not Found)</p>`;
+
+    _app.StatusBar.addError({
+      id: _this.id,
+      message: message,
+      status: 404
+    });
+
+    button.classList.remove('selected');
+    earthquakes.removeShakeMap();
   };
 
   /**
@@ -98,6 +119,7 @@ var ShakeMapContours = function (options) {
 
     _app = null;
 
+    _handleError = null;
     _onEachFeature = null;
     _onMouseOver = null;
     _style = null;
@@ -106,18 +128,22 @@ var ShakeMapContours = function (options) {
   };
 
   /**
-   * Fetch the feed data.
+   * Fetch the feed data (if the feed URL is set).
    */
   _this.fetch = function () {
     _app.StatusBar.reset(); // purge Earthquake's loading message
 
-    _this.mapLayer = L.geoJSON.async(_this.url, {
-      app: _app,
-      feature: _this,
-      onEachFeature: _onEachFeature,
-      pane: 'shakemap-contours', // controls stacking order
-      style: _style
-    });
+    if (_this.url) {
+      _this.mapLayer = L.geoJSON.async(_this.url, {
+        app: _app,
+        feature: _this,
+        onEachFeature: _onEachFeature,
+        pane: 'shakemap-contours', // controls stacking order
+        style: _style
+      });
+    } else {
+      _handleError();
+    }
   };
 
   /**
