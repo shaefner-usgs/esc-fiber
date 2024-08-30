@@ -75,8 +75,7 @@ var ShakeMapContours = function (options) {
    * @param layer {L.Layer}
    */
   _onEachFeature = function (feature, layer) {
-    var props = feature.properties,
-        tooltip = props.units.toUpperCase() + ' ' + props.value;
+    var tooltip = 'MMI ' + feature.properties.value;
 
     layer.bindTooltip(tooltip);
   };
