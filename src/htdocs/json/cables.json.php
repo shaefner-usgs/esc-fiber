@@ -13,6 +13,7 @@ $protocol = isset($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) === 'on' ?
 $template = [
   'type' => 'FeatureCollection',
   'metadata' => [
+    'count' => 0,
     'generated' => floor(microtime(true) * 1000),
     'url' => "$protocol://" . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']
   ],
@@ -61,6 +62,7 @@ foreach($names as $id => $name) {
 
 // Render the JSON feed
 $template['features'] = $features;
+$template['metadata']['count'] = count($features);
 
 setHeaders();
 
