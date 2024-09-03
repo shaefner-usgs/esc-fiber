@@ -34,7 +34,7 @@ var AppUtil = require('util/AppUtil');
  *       url: {String}
  *     }
  */
-var Cables = function (options) {
+var SeismicStations = function (options) {
   var _this,
       _initialize,
 
@@ -174,4 +174,4 @@ var Cables = function (options) {
 };
 
 
-module.exports = Cables;
+module.exports = SeismicStations;
