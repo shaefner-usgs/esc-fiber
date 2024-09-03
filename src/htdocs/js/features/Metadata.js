@@ -78,7 +78,7 @@ var Metadata = function (options) {
 
       Object.keys(_this.data).forEach(id => {
         html += L.Util.template(
-          '<tr class="{experiment}">' +
+          '<tr class="' + id + '">' +
             '<th>{number}</th>' +
             '<td>{startdate}</td>' +
             '<td>{enddate}</td>' +
@@ -105,35 +105,32 @@ var Metadata = function (options) {
    * @return data {Object}
    */
   _getData = function (json) {
-    var data = {},
-        experiments = json.experiments;
+    var data = {};
 
-    Object.keys(experiments).forEach(id => {
-      var experiment = experiments[id],
-          enddate = Luxon.DateTime.fromSQL(experiment.Overview.enddate),
-          endtime = Luxon.DateTime.fromSQL(experiment.Acquisition.endtime),
-          startdate = Luxon.DateTime.fromSQL(experiment.Overview.startdate),
-          starttime = Luxon.DateTime.fromSQL(experiment.Acquisition.starttime);
+    json.experiments.forEach(experiment => {
+      var enddate = Luxon.DateTime.fromSQL(experiment.overview.enddate),
+          endtime = Luxon.DateTime.fromSQL(experiment.acquisition.endtime),
+          startdate = Luxon.DateTime.fromSQL(experiment.overview.startdate),
+          starttime = Luxon.DateTime.fromSQL(experiment.acquisition.starttime);
 
-      data[id] = {
-        channels: experiment.Acquisition.channels || '',
-        doi: experiment.Overview.doi || '–',
-        email: experiment.Overview.pi_email || '',
+      data[experiment.id] = {
+        channels: experiment.acquisition.channels || '',
+        doi: experiment.overview.doi || '–',
+        email: experiment.overview.pi_email || '',
         enddate: enddate.toFormat(_app.dateFormat),
         endtime: endtime.toFormat(_app.timeFormat),
         endtimeISO: endtime.toISO()?.slice(0, -10), // ? checks if null
-        experiment: id,
-        interval: experiment.Acquisition.interval || '',
-        length: experiment.Acquisition.length || '',
+        interval: experiment.acquisition.interval || '',
+        length: experiment.acquisition.length || '',
         location: _this.name,
-        manufacturer: experiment.Interrogator.manufacturer || '',
-        model: experiment.Interrogator.model || '',
-        name: experiment.Overview.pi || '',
-        number: id.match(/\d+$/)[0],
-        plot: experiment.Overview.plot || '',
-        rate: experiment.Acquisition.rate || '',
-        reference: experiment.Overview.reference || '–',
-        references: experiment.References,
+        manufacturer: experiment.interrogator.manufacturer || '',
+        model: experiment.interrogator.model || '',
+        name: experiment.overview.pi || '',
+        number: experiment.id.match(/\d+$/)[0],
+        plot: experiment.overview.plot || '',
+        rate: experiment.acquisition.rate || '',
+        reference: experiment.overview.reference || '–',
+        references: experiment.references,
         startdate: startdate.toFormat(_app.dateFormat),
         starttime: starttime.toFormat(_app.timeFormat),
         starttimeISO: starttime.toISO()?.slice(0, -10) // ? checks if null
