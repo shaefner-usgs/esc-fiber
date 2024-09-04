@@ -42,7 +42,7 @@ L.Control.Zoom.Reset = L.Control.extend({
    */
   _createButton: function (container) {
     var button = L.DomUtil.create('a', 'leaflet-control-reset-globe', container),
-        title = 'Zoom map to full extent';
+        title = 'Zoom to full extent';
 
     button.href = '#';
     button.innerHTML = '<i class="icon-globe">';
