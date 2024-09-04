@@ -38,7 +38,7 @@ var Cable = function (options) {
       _onPopupOpen,
       _removeExperiment,
       _render,
-      _selectButton,
+      _setButton,
       _showDetails,
       _toggleExperiment;
 
@@ -172,7 +172,7 @@ var Cable = function (options) {
       });
     } else {
       _addListeners(el);
-      _selectButton(el);
+      _setButton(el);
     }
   };
 
@@ -210,11 +210,11 @@ var Cable = function (options) {
   };
 
   /**
-   * Select the active map layers' button (if applicable).
+   * Set the active map layers' button to active state (if applicable).
    *
    * @param el {Element}
    */
-  _selectButton = function (el) {
+  _setButton = function (el) {
     var cable = sessionStorage.getItem('cable'),
         experiment = sessionStorage.getItem('experiment'),
         maplayers = el.querySelectorAll('.maplayers');
@@ -284,7 +284,7 @@ var Cable = function (options) {
 
     popup.setContent(html).update();
     _addListeners(el);
-    _selectButton(el);
+    _setButton(el);
   };
 
   /**
@@ -305,7 +305,7 @@ var Cable = function (options) {
     _onPopupOpen = null;
     _removeExperiment = null;
     _render = null;
-    _selectButton = null;
+    _setButton = null;
     _showDetails = null;
     _toggleExperiment = null;
 
