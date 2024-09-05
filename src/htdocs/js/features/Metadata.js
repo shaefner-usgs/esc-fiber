@@ -232,15 +232,18 @@ var Metadata = function (options) {
    * @return {String}
    */
   _this.getContent = function (id) {
-    var data = Object.assign({}, _this.data[id]),
+    var name,
+        data = Object.assign({}, _this.data[id]),
         plot = _getPlot(id),
         references = _getReferences(id);
 
     if (data.doi !== '–') {
-      data.doi = `<a href="${data.doi}" target="new">${data.doi}</a>`;
+      name = data.doi.split('doi.org/')[1];
+      data.doi = `<a href="${data.doi}" target="new">${name}</a>`;
     }
     if (data.reference !== '–') {
-      data.reference = `<a href="${data.reference}" target="new">${data.reference}</a>`;
+      name = new URL(data.reference).hostname,
+      data.reference = `<a href="${data.reference}" target="new">${name}</a>`;
     }
 
     return L.Util.template(
