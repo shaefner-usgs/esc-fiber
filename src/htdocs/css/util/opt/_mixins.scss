@@ -4,7 +4,7 @@
 @use 'variables' as *;
 
 @mixin close-button() {
-  background: var(--bg-color);
+  background: var(--bg-color-alpha);
   border-radius: 50%;
   color: var(--accent-color);
   cursor: pointer;
