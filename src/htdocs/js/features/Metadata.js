@@ -130,8 +130,8 @@ var Metadata = function (options) {
         number: experiment.id.match(/\d+$/)[0],
         plot: experiment.overview.plot || '',
         rate: experiment.acquisition.rate || '',
-        reference: experiment.overview.reference || '–',
         references: experiment.references,
+        repository: experiment.overview.repository || '–',
         startdate: startdate.toFormat(_app.dateFormat),
         starttime: starttime.toFormat(_app.timeFormat),
         starttimeISO: starttime.toISO()?.slice(0, -10) // ? checks if null
@@ -267,9 +267,9 @@ var Metadata = function (options) {
       name = data.doi.split('doi.org/')[1];
       data.doi = `<a href="${data.doi}" target="new">${name}</a>`;
     }
-    if (data.reference !== '–') {
-      name = new URL(data.reference).hostname,
-      data.reference = `<a href="${data.reference}" target="new">${name}</a>`;
+    if (data.repository !== '–') {
+      name = new URL(data.repository).hostname,
+      data.repository = `<a href="${data.repository}" target="new">${name}</a>`;
     }
 
     return L.Util.template(
@@ -320,7 +320,7 @@ var Metadata = function (options) {
         '<dt>DOI</dt>' +
         '<dd>{doi}</dd>' +
         '<dt>Repository</dt>' +
-        '<dd>{reference}</dd>' +
+        '<dd>{repository}</dd>' +
       '</dl>' +
       references,
       data

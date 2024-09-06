@@ -77,7 +77,7 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
       'pi' => $exp->pi,
       'pi_email' => $exp->pi_email,
       'plot' => $plot,
-      'reference' => $exp->reference,
+      'repository' => $exp->repository,
       'startdate' => $exp->start_date
     ],
     'references' => $references
