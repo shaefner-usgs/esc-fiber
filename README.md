@@ -1,7 +1,7 @@
 Fiber Optic Seismology
 ======================
 
-[Web application](https://bayquakealliance.org/powell/) that displays Distributed Acoustic Sensing Data.
+[Web application](https://earthquake.usgs.gov/esc/fiber/) that displays Distributed Acoustic Sensing Data.
 
 ## Installation
 
