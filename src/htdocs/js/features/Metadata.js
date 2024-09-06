@@ -39,6 +39,7 @@ var Metadata = function (options) {
 
       _getContent,
       _getData,
+      _getItem,
       _getPlot,
       _getReferences;
 
@@ -141,6 +142,22 @@ var Metadata = function (options) {
   };
 
   /**
+   * Get the HTML list item for the given reference.
+   *
+   * @param reference {Object}
+   *
+   * @return {String}
+   */
+  _getItem = function (reference) {
+    return L.Util.template(
+      '<li>' +
+        '{author}, <a href="{doi}" target="new">{title}</a>, {year}.' +
+      '</li>',
+      reference
+    );
+  };
+
+  /**
    * Get the HTML for the given experiment's plot.
    *
    * @param id {String}
@@ -170,23 +187,31 @@ var Metadata = function (options) {
    * @return html {String}
    */
   _getReferences = function (id) {
-    var html = '',
-        lis = '';
+    var additional = '',
+        html = '',
+        primary = '';
 
     _this.data[id].references.forEach(reference => {
-      lis += L.Util.template(
-        '<li>' +
-          '{author}, <a href="{doi}" target="new">{title}</a>, {year}.' +
-        '</li>',
-        reference
-      );
+      if (reference.primary) {
+        primary = _getItem(reference);
+      } else {
+        additional += _getItem(reference);
+      }
     });
 
-    if (lis) {
+    if (primary) {
       html =
+        '<h4>Primary Reference</h4>' +
+        '<ul class="refs">' +
+          primary +
+        '</ul>';
+    }
+
+    if (additional) {
+      html +=
         '<h4>Additional References</h4>' +
         '<ul class="refs">' +
-          lis +
+          additional +
         '</ul>';
     }
 
@@ -207,6 +232,7 @@ var Metadata = function (options) {
 
     _getContent = null;
     _getData = null;
+    _getItem = null;
     _getPlot = null;
     _getReferences = null;
 
@@ -289,16 +315,14 @@ var Metadata = function (options) {
         '</section>' +
       '</div>' +
       plot +
-      '<h4>Citation</h4>' +
+      '<h4>Data Archive</h4>' +
       '<dl class="citation props">' +
         '<dt>DOI</dt>' +
         '<dd>{doi}</dd>' +
-        '<dt>Reference</dt>' +
+        '<dt>Repository</dt>' +
         '<dd>{reference}</dd>' +
       '</dl>' +
-      references +
-      '<h4>Data Archive</h4>' +
-      '<p>Placeholder</p>',
+      references,
       data
     );
   };
