@@ -37,6 +37,7 @@ while ($ref = $rsReferences->fetch(PDO::FETCH_OBJ)) {
   $refs[$id][] = [
     'author' => $ref->author,
     'doi' => $ref->doi,
+    'primary' => intval($ref->primary),
     'title' => $ref->title,
     'year' => $ref->year
   ];
