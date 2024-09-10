@@ -72,6 +72,7 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
       'model' => $exp->model
     ],
     'overview' => [
+      'caption' => $exp->caption,
       'doi' => $exp->doi,
       'enddate' => $exp->end_date,
       'pi' => $exp->pi,

@@ -118,6 +118,7 @@ var Metadata = function (options) {
           starttime = Luxon.DateTime.fromSQL(experiment.acquisition.starttime);
 
       data[experiment.id] = {
+        caption: experiment.overview.caption || '',
         channels: experiment.acquisition.channels || '',
         doi: experiment.overview.doi || '–',
         email: experiment.overview.pi_email || '',
@@ -169,13 +170,18 @@ var Metadata = function (options) {
    * @return html {String}
    */
   _getPlot = function (id) {
-    var html = '', // default
+    var caption = _this.data[id].caption,
+        html = '', // default
         plot = _this.data[id].plot;
 
     if (plot) {
       html =
         '<h4>Data Quality</h4>' +
         `<img src="img/plots/${plot}" alt="waterfall plot">`;
+
+      if (caption) {
+        html += '<p>' + caption + '</p>';
+      }
     }
 
     return html;

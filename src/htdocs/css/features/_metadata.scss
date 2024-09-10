@@ -5,10 +5,15 @@
     }
 
     img,
+    p,
     .citation,
     .refs {
       max-width: 100%;
       width: 50rem;
+    }
+
+    p {
+      margin-top: 0;
     }
 
     section {
