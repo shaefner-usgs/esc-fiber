@@ -15,6 +15,7 @@
  * @return _this {Object}
  *     {
  *       addContent: {Function}
+ *       code: {String}
  *       destroy: {Function}
  *       id: {String}
  *       mapLayer: {L.FeatureGroup}
@@ -50,6 +51,7 @@ var Cable = function (options) {
 
     _app = options.app;
 
+    _this.code = feature.properties.code;
     _this.id = feature.id;
     _this.mapLayer = L.featureGroup(); // Polyline + Points
     _this.name = feature.properties.name;
@@ -111,6 +113,7 @@ var Cable = function (options) {
     return '' +
       '<div class="cable">' +
         `<h4>${_this.name}</h4>` +
+        `<p>${_this.code}</p>` +
         '<div class="spinner"></div>' +
       '<div>';
   };
@@ -199,7 +202,7 @@ var Cable = function (options) {
       .addLayer(layer) // Polyline
       .addLayer(_getPoints(feature))
       .bindTooltip(_this.name)
-      .bindPopup(_getContent(_this.name), {
+      .bindPopup(_getContent(), {
         maxWidth: 600,
         minWidth: 300
       })

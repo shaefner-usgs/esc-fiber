@@ -62,12 +62,15 @@ var Metadata = function (options) {
   /**
    * Get the HTML content that's added to the Cable Popup.
    *
+   * @param code {String}
+   *
    * @return html {String}
    */
-  _getContent = function () {
+  _getContent = function (code) {
     var html =
       '<div class="cable">' +
         `<h4>${_this.name}</h4>` +
+        `<p>${code}</p>` +
         '<h5>Experiments</h5>';
 
     if (AppUtil.isEmpty(_this.data)) {
@@ -342,7 +345,7 @@ var Metadata = function (options) {
       _this.lightbox.render();
     }
 
-    cable.addContent(_getContent());
+    cable.addContent(_getContent(cable.code));
   };
 
 

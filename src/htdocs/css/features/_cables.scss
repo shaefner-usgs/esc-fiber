@@ -1,6 +1,11 @@
 @layer default {
   .cable {
-    min-height: 4rem;
+    min-height: 6rem;
+
+    p {
+      color: var(--text-color-lighter);
+      margin: -.75rem 0 0;
+    }
 
     table {
       border-collapse: separate;
@@ -21,7 +26,7 @@
     }
 
     .spinner {
-      margin-top: .625rem;
+      margin-top: 1.5rem;
     }
   }
 }

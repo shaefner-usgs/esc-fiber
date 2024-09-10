@@ -82,7 +82,7 @@ class Db {
    * @return {Function}
    */
   public function queryCables () {
-    $sql = 'SELECT c.cable_id, c.lat, c.lng, n.name FROM das_cables c
+    $sql = 'SELECT c.cable_id, c.lat, c.lng, n.code, n.name FROM das_cables c
       JOIN das_names n ON c.cable_id = n.cable_id';
 
     return $this->_execQuery($sql);

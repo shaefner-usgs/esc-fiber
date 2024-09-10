@@ -28,34 +28,38 @@ $feature = [
     'coordinates' => []
   ],
   'properties' => [
+    'code' => '',
     'name' => ''
   ]
 ];
 
-$coords = [];
+$cables = [];
 $features = [];
-$names = [];
 
-// Store cable data in Arrays.
+// Store cable data in an Array.
 while ($point = $rsCables->fetch(PDO::FETCH_OBJ)) {
   $id = $point->cable_id;
 
-  if (!array_key_exists($id, $coords)) {
-    $coords[$id] = [];
-    $names[$id] = $point->name;
+  if (!array_key_exists($id, $cables)) {
+    $cables[$id] = [
+      'code' => $point->code,
+      'coords' => [],
+      'name' => $point->name
+    ];
   }
 
-  $coords[$id][] = [
+  $cables[$id]['coords'][] = [
     floatval($point->lng),
     floatval($point->lat)
   ];
 }
 
 // Store features in an Array.
-foreach($names as $id => $name) {
+foreach($cables as $id => $cable) {
   $feature['id'] = $id;
-  $feature['geometry']['coordinates'] = $coords[$id];
-  $feature['properties']['name'] = $name;
+  $feature['geometry']['coordinates'] = $cable['coords'];
+  $feature['properties']['code'] = $cable['code'];
+  $feature['properties']['name'] = $cable['name'];
 
   $features[] = $feature;
 }
