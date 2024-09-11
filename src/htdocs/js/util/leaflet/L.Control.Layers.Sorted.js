@@ -158,9 +158,7 @@ L.Control.Layers.Sorted = L.Control.Layers.extend({
     if (id) {
       displayName = this._displayNames[id] || '';
 
-      if (!this._names[id]) {
-        this._names[id] = obj.name; // store the 'original' name of the overlay
-      }
+      this._names[id] = obj.name; // store the 'original' name of the overlay
 
       label.classList.add(id);
     }
