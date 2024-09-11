@@ -203,7 +203,7 @@ var Cable = function (options) {
       .addLayer(_getPoints(feature))
       .bindTooltip(_this.name)
       .bindPopup(_getContent(), {
-        maxWidth: 600,
+        maxWidth: 425,
         minWidth: 300
       })
       .on({
