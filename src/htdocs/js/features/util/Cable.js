@@ -76,7 +76,7 @@ var Cable = function (options) {
       latitude: center.lat,
       longitude: center.lng,
       maxradiuskm: 100,
-      minmagnitude: 0,
+      minmagnitude: data.magthresh,
       name: _this.name,
       starttime: data.starttimeISO
     });

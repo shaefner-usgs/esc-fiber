@@ -75,6 +75,7 @@ while ($exp = $rsMetadata->fetch(PDO::FETCH_OBJ)) {
       'caption' => $exp->caption,
       'doi' => $exp->doi,
       'enddate' => $exp->end_date,
+      'magthresh' => floatval($exp->magthresh),
       'pi' => $exp->pi,
       'pi_email' => $exp->pi_email,
       'plot' => $plot,

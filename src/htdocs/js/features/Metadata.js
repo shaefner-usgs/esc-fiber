@@ -128,6 +128,7 @@ var Metadata = function (options) {
         interval: experiment.acquisition.interval || '',
         length: experiment.acquisition.length || '',
         location: _this.name,
+        magthresh: experiment.overview.magthresh,
         manufacturer: experiment.interrogator.manufacturer || '',
         model: experiment.interrogator.model || '',
         name: experiment.overview.pi || '',

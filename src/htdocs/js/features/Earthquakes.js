@@ -126,7 +126,7 @@ var Earthquakes = function (options) {
     _this.description = ''; // default
     _this.experiment = options.experiment;
     _this.id = 'earthquakes';
-    _this.name = 'M 0+ Earthquakes';
+    _this.name = `M ${options.minmagnitude}+ Earthquakes`;
     _this.url = _getUrl({
       endtime: options.endtime,
       latitude: options.latitude,
