@@ -534,8 +534,6 @@ var Earthquakes = function (options) {
    * Select the ShakeMap Contours button (if applicable).
    */
   _selectButton = function () {
-    _button.classList.add('no-animation'); // conceal (de)selection of button
-
     if (_button.id === sessionStorage.getItem('shakemap')) {
       _button.classList.add('selected');
     } else {
