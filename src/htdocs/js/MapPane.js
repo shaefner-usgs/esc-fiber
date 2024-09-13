@@ -154,6 +154,8 @@ var MapPane = function (options) {
   _setBounds = function (feature) {
     var bounds = feature.mapLayer.getBounds();
 
+    if (!feature.zoomToLayer) return;
+
     if (feature.mode === 'experiment' && feature.cable !== _cable) { // reset
       _bounds = bounds;
       _cable = feature.cable;
@@ -176,7 +178,7 @@ var MapPane = function (options) {
 
     _setBounds(feature);
 
-    if (status === 'ready') {
+    if (feature.zoomToLayer && status === 'ready') {
       _this.fitBounds();
 
       if (feature.mode === 'experiment') {
