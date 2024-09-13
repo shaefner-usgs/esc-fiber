@@ -31,6 +31,7 @@ require('util/leaflet/L.TerrainLayer');
  *       fitBounds: {Function}
  *       initialBounds: {L.LatLngBounds}
  *       layerControl: {L.Control.Layers}
+ *       map: {L.Map}
  *       removeFeature: {Function}
  *     }
  */
@@ -42,7 +43,6 @@ var MapPane = function (options) {
       _bounds,
       _cable,
       _layers,
-      _map,
 
       _addControls,
       _createPane,
@@ -66,16 +66,16 @@ var MapPane = function (options) {
    * attribution controls are added by default.
    */
   _addControls = function () {
-    L.control.mousePosition().addTo(_map);
-    L.control.scale().addTo(_map);
+    L.control.mousePosition().addTo(_this.map);
+    L.control.scale().addTo(_this.map);
     L.control.zoom.reset({
       app: _app
-    }).addTo(_map);
+    }).addTo(_this.map);
 
     _this.layerControl = L.control.layers.sorted(
       _layers.baseLayers,
       _layers.overlays
-    ).addTo(_map);
+    ).addTo(_this.map);
   };
 
   /**
@@ -89,8 +89,8 @@ var MapPane = function (options) {
    *     Feature id
    */
   _createPane = function (id) {
-    if (!_map.getPane(id)) {
-      _map.createPane(id, _map.getPane('overlayPane'));
+    if (!_this.map.getPane(id)) {
+      _this.map.createPane(id, _this.map.getPane('overlayPane'));
     }
   };
 
@@ -131,7 +131,7 @@ var MapPane = function (options) {
   _initMap = function (el) {
     var zoomControl;
 
-    _map = L.map('map', {
+    _this.map = L.map('map', {
       layers: _layers.defaults,
       minZoom: 1
     }).setView([40, -96], 3); // set arbitrary view so map fully initializes
@@ -189,7 +189,7 @@ var MapPane = function (options) {
     }
 
     _createPane(feature.id);
-    _map.addLayer(feature.mapLayer);
+    _this.map.addLayer(feature.mapLayer);
     _this.layerControl.addOverlay(feature);
   };
 
@@ -210,7 +210,7 @@ var MapPane = function (options) {
         opts.animate = false;
       }
 
-      _map.fitBounds(bounds, opts);
+      _this.map.fitBounds(bounds, opts);
     }
   };
 
@@ -221,7 +221,7 @@ var MapPane = function (options) {
    */
   _this.removeFeature = function (feature) {
     if (feature.mapLayer) {
-      _map.removeLayer(feature.mapLayer);
+      _this.map.removeLayer(feature.mapLayer);
       _this.layerControl.removeLayer(feature.mapLayer);
     }
   };
