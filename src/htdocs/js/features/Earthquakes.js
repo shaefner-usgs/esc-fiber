@@ -84,6 +84,7 @@ _MARKERS = {
  *       removeShakeMap: {Function}
  *       render: {Function}
  *       url: {String}
+ *       zoomToLayer: {Boolean}
  *     }
  */
 var Earthquakes = function (options) {
@@ -139,6 +140,7 @@ var Earthquakes = function (options) {
       minmagnitude: options.minmagnitude,
       starttime: options.starttime
     });
+    _this.zoomToLayer = true;
 
     if (options.maxradiuskm) {
       _this.description = `within ${options.maxradiuskm} km`;

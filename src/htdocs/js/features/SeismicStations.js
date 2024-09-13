@@ -32,6 +32,7 @@ var AppUtil = require('util/AppUtil');
  *       remove: {Function}
  *       render: {Function}
  *       url: {String}
+ *       zoomToLayer: {Boolean}
  *     }
  */
 var SeismicStations = function (options) {
@@ -61,6 +62,7 @@ var SeismicStations = function (options) {
       maxradiuskm: options.maxradiuskm,
       starttime: options.starttime
     });
+    _this.zoomToLayer = true;
   };
 
   /**

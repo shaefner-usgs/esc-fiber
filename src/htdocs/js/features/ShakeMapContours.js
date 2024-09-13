@@ -22,6 +22,7 @@
  *       remove: {Function}
  *       render: {Function}
  *       url: {String}
+ *       zoomToLayer: {Boolean}
  *     }
  */
 var ShakeMapContours = function (options) {
@@ -47,6 +48,7 @@ var ShakeMapContours = function (options) {
     _this.mapLayer = L.featureGroup(); // default (useful if no data is fetched)
     _this.name = 'ShakeMap Contours';
     _this.url = ''; // set by Earthquake Feature
+    _this.zoomToLayer = false;
   };
 
   /**

@@ -23,6 +23,7 @@ var Cable = require('features/util/Cable');
  *       remove: {Function}
  *       render: {Function}
  *       url: {String}
+ *       zoomToLayer: {Boolean}
  *     }
  */
 var Cables = function (options) {
@@ -43,6 +44,7 @@ var Cables = function (options) {
     _this.mapLayer = L.featureGroup();
     _this.name = 'Cables';
     _this.url = 'json/cables.json.php';
+    _this.zoomToLayer = true;
   };
 
   /**

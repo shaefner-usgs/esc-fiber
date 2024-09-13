@@ -25,6 +25,7 @@
  *       remove: {Function}
  *       render: {Function}
  *       url: {String}
+ *       zoomToLayer: {Boolean}
  *     }
  */
 var Experiment = function (options) {
@@ -50,6 +51,7 @@ var Experiment = function (options) {
     _this.name = `${options.name} Experiment ${number}`;
     _this.url = `json/experiment.json.php?cable=${_this.cable}` +
       `&experiment=${number}`;
+    _this.zoomToLayer = true;
   };
 
   /**
