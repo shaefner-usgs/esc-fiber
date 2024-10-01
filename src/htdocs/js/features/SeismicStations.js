@@ -2,7 +2,8 @@
 'use strict';
 
 
-var AppUtil = require('util/AppUtil');
+var AppUtil = require('util/AppUtil'),
+    Luxon = require('luxon');
 
 
 /**
@@ -56,7 +57,7 @@ var SeismicStations = function (options) {
     _this.id = 'seismic-stations';
     _this.name = 'Seismic Stations';
     _this.url = _getUrl({
-      endtime: options.endtime,
+      endtime: options.endtime || Luxon.DateTime.now().toUTC().toISO().slice(0, -5),
       latitude: options.latitude,
       longitude: options.longitude,
       maxradiuskm: options.maxradiuskm,

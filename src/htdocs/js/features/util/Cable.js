@@ -67,19 +67,23 @@ var Cable = function (options) {
    */
   _addExperiment = function (id) {
     var center = _this.mapLayer.getBounds().getCenter(),
-        data = _app.Features.getFeature('metadata').data[id];
+        data = _app.Features.getFeature('metadata').data[id],
+        opts = {
+          cable: _this.id,
+          experiment: id,
+          latitude: center.lat,
+          longitude: center.lng,
+          maxradiuskm: 100,
+          minmagnitude: data.magthresh,
+          name: _this.name,
+          starttime: data.starttimeISO
+        };
 
-    _app.Features.createFeatures('experiment', {
-      cable: _this.id,
-      endtime: data.endtimeISO,
-      experiment: id,
-      latitude: center.lat,
-      longitude: center.lng,
-      maxradiuskm: 100,
-      minmagnitude: data.magthresh,
-      name: _this.name,
-      starttime: data.starttimeISO
-    });
+    if (data.endtimeISO) {
+      opts.endtime = data.endtimeISO; // don't pass null value
+    }
+
+    _app.Features.createFeatures('experiment', opts);
 
     sessionStorage.setItem('cable', _this.id);
     sessionStorage.setItem('experiment', id);
@@ -317,7 +321,7 @@ var Cable = function (options) {
 
   /**
    * Affix Popup to Cable (becomes "detached" when the map is zoomed to fit the
-   * bounds of an experiment's Features).
+   * bounds of an experiment).
    */
   _this.setPopup = function () {
     if (_this.mapLayer.isPopupOpen()) {

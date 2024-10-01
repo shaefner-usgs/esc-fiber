@@ -112,19 +112,29 @@ var Metadata = function (options) {
     var data = {};
 
     json.experiments.forEach(experiment => {
-      var enddate = Luxon.DateTime.fromSQL(experiment.overview.enddate),
+      var end = {},
+          enddate = Luxon.DateTime.fromSQL(experiment.overview.enddate),
           endtime = Luxon.DateTime.fromSQL(experiment.acquisition.endtime),
           startdate = Luxon.DateTime.fromSQL(experiment.overview.startdate),
           starttime = Luxon.DateTime.fromSQL(experiment.acquisition.starttime);
+
+      if (enddate.invalid) { // assume ongoing (i.e. parsing null date value)
+        end.date = end.time = 'Ongoing';
+        end.iso = null;
+      } else {
+        end.date = enddate.toFormat(_app.dateFormat);
+        end.time = endtime.toFormat(_app.timeFormat);
+        end.iso = endtime.toISO().slice(0, -10);
+      }
 
       data[experiment.id] = {
         caption: experiment.overview.caption || '',
         channels: experiment.acquisition.channels || '',
         doi: experiment.overview.doi || '–',
         email: experiment.overview.pi_email || '',
-        enddate: enddate.toFormat(_app.dateFormat),
-        endtime: endtime.toFormat(_app.timeFormat),
-        endtimeISO: endtime.toISO()?.slice(0, -10), // ? checks if null
+        enddate: end.date,
+        endtime: end.time,
+        endtimeISO: end.iso,
         interval: experiment.acquisition.interval || '',
         length: experiment.acquisition.length || '',
         location: _this.name,
