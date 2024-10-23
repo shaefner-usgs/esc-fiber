@@ -83,7 +83,7 @@ class Db {
    */
   public function queryCables () {
     $sql = 'SELECT c.cable_id, c.lat, c.lng, n.code, n.name FROM das_cables c
-      JOIN das_names n ON c.cable_id = n.cable_id';
+      JOIN das_names n ON c.cable_id = n.cable_id ORDER BY c.id ASC';
 
     return $this->_execQuery($sql);
   }
