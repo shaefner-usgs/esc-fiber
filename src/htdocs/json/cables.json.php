@@ -54,7 +54,7 @@ while ($point = $rsCables->fetch(PDO::FETCH_OBJ)) {
   ];
 }
 
-// Store features in an Array.
+// Store GeoJSON features in an Array.
 foreach($cables as $id => $cable) {
   $feature['id'] = $id;
   $feature['geometry']['coordinates'] = $cable['coords'];
