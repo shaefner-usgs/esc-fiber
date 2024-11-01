@@ -52,6 +52,8 @@ L.Control.Zoom.Reset = L.Control.extend({
     button.setAttribute('role', 'button');
     button.setAttribute('aria-label', title);
 
+    L.DomEvent.disableClickPropagation(button);
+    L.DomEvent.on(button, 'click', L.DomEvent.stop);
     L.DomEvent.on(button, 'click', this._setExtent, this);
   },
 
