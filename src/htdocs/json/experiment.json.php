@@ -39,7 +39,7 @@ $features = [];
 
 // Store GeoJSON features in an Array.
 while ($point = $rsExperiment->fetch(PDO::FETCH_OBJ)) {
-  $feature['id'] = $point->channel_id;
+  $feature['id'] = $point->channel;
   $feature['geometry']['coordinates'] = [
     floatval($point->lng),
     floatval($point->lat)

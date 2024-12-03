@@ -97,9 +97,9 @@ class Db {
    * @return {Function}
    */
   public function queryExperiment ($cable_id, $experiment_id) {
-    $sql = 'SELECT channel_id, distance, lat, lng FROM das_experiments
+    $sql = 'SELECT channel, distance, lat, lng FROM das_experiments
       WHERE cable_id = :cable_id AND experiment_id = :experiment_id
-      ORDER BY channel_id ASC';
+      ORDER BY channel ASC';
 
     return $this->_execQuery($sql, [
       'cable_id' => $cable_id,
