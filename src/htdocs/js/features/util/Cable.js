@@ -9,7 +9,7 @@
  *     {
  *       app: {Object} Application
  *       feature: {Object} GeoJSON feature
- *       layer: {L.Layer}
+ *       layer: {L.Layer} Polyline
  *     }
  *
  * @return _this {Object}
@@ -41,7 +41,8 @@ var Cable = function (options) {
       _render,
       _setButton,
       _showDetails,
-      _toggleExperiment;
+      _toggleExperiment,
+      _zoomToExperiment;
 
 
   _this = {};
@@ -273,7 +274,19 @@ var Cable = function (options) {
       button.classList.add('selected');
 
       _addExperiment(id);
+      _zoomToExperiment();
     }
+  };
+
+  /**
+   * Zoom to experiment region immediately (before Features are fetched).
+   */
+  _zoomToExperiment = function () {
+    var center = _this.mapLayer.getBounds().getCenter(),
+        bounds = L.latLng(center).toBounds(200 * 1000); // 200 km (in meters)
+
+    _app.MapPane.fitBounds(bounds);
+    //_this.setPopup();
   };
 
   // ----------------------------------------------------------
@@ -315,6 +328,7 @@ var Cable = function (options) {
     _setButton = null;
     _showDetails = null;
     _toggleExperiment = null;
+    _zoomToExperiment = null;
 
     _this = null;
   };
