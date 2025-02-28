@@ -6,13 +6,13 @@
 require('leaflet-mouse-position');
 require('util/leaflet/L.Control.Layers.Sorted');
 require('util/leaflet/L.Control.Zoom.Reset');
-require('util/leaflet/L.DarkLayer');
+// require('util/leaflet/L.DarkLayer');
 require('util/leaflet/L.FaultsLayer');
 require('util/leaflet/L.GeoJSON.Async');
-require('util/leaflet/L.GreyscaleLayer');
+// require('util/leaflet/L.GreyscaleLayer');
 require('util/leaflet/L.Popup');
 require('util/leaflet/L.SatelliteLayer');
-require('util/leaflet/L.TerrainLayer');
+require('util/leaflet/L.TerrainLayer-alt');
 
 
 /**
@@ -102,18 +102,18 @@ var MapPane = function (options) {
   _getLayers = function () {
     var layers,
         faults = L.faultsLayer(),
-        greyscale = L.greyscaleLayer();
+        terrain = L.terrainLayer();
 
     layers = {
       baseLayers: {
-        'Light': greyscale,
-        'Dark': L.darkLayer(),
+        // 'Light': greyscale,
+        // 'Dark': L.darkLayer(),
         'Satellite': L.satelliteLayer(),
-        'Terrain': L.terrainLayer()
+        'Terrain': terrain
       },
       defaults: [
         faults,
-        greyscale
+        terrain
       ],
       overlays: {
         'Faults': faults
