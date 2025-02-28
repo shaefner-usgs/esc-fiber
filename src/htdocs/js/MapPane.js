@@ -66,6 +66,7 @@ var MapPane = function (options) {
    * attribution controls are added by default.
    */
   _addControls = function () {
+    L.control.attribution({ prefix: '' }).addTo(_this.map);
     L.control.mousePosition().addTo(_this.map);
     L.control.scale().addTo(_this.map);
     L.control.zoom.reset({
@@ -132,6 +133,7 @@ var MapPane = function (options) {
     var zoomControl;
 
     _this.map = L.map('map', {
+      attributionControl: false,
       layers: _layers.defaults,
       minZoom: 1
     }).setView([40, -96], 3); // set arbitrary view so map fully initializes
