@@ -59,6 +59,16 @@
     font-size: 2rem;
     font-weight: 500;
     margin: 0;
+
+    a {
+      color: #fff;
+      text-decoration: none;
+
+      &:hover, &:active {
+        color: #fff;
+        text-decoration: underline;
+      }
+    }
   }
 
   h2,
